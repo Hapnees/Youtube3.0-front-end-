@@ -1,0 +1,15 @@
+.wrapper {
+	box-shadow: 0 0 8px rgb(80, 80, 80);
+}
+
+.container {
+	@apply sticky w-[1700px] mx-auto py-5 flex items-center;
+}
+
+.section__1 {
+	width: 350px;
+}
+
+.section__2 {
+	@apply flex justify-between items-center w-full;
+}
