@@ -1,0 +1,7 @@
+.container {
+	@apply flex items-center gap-3;
+}
+
+.username__container {
+	@apply flex items-center gap-1 px-2 cursor-pointer hover:bg-white hover:text-black rounded-md duration-300;
+}

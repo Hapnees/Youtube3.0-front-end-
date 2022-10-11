@@ -1,0 +1,11 @@
+.base {
+	@apply flex items-center gap-2 px-6 py-[2px] border rounded-md duration-300 cursor-pointer;
+}
+
+.active {
+	@apply bg-transparent border-gray-500 hover:bg-transparent;
+}
+
+.non_active {
+	@apply bg-[#bc2626] border-transparent hover:bg-[#9c1f1f];
+}

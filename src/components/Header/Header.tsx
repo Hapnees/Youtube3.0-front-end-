@@ -1,9 +1,15 @@
-import React from 'react'
-import HedaerInput from '../ui/HeaderInput/HeaderInput'
+import React, { useState } from 'react'
+import HedaerInput from '../ui/Header/HeaderInput/HeaderInput'
 import HeaderMenu from './HeaderMenu/HeaderMenu'
 import cl from './Header.module.scss'
+import LoginButton from '../ui/Header/LoginButton/LoginButton'
+import LoginForm from '../AuthForm/LoginForm/LoginForm'
+import { CSSTransition } from 'react-transition-group'
 
 const Header = () => {
+	const [isClickedLoginButton, setIsClickedLoginButton] =
+		useState<boolean>(false)
+
 	return (
 		<div className={cl.wrapper}>
 			<div className={cl.container}>
@@ -13,7 +19,26 @@ const Header = () => {
 
 				<div className={cl.section__2}>
 					<HedaerInput placeholder='Поиск...' />
-					<HeaderMenu />
+
+					{/* <HeaderMenu /> */}
+					<div className='relative'>
+						<LoginButton
+							isClickedLoginButton={isClickedLoginButton}
+							onClick={() => setIsClickedLoginButton(!isClickedLoginButton)}
+						/>
+						<CSSTransition
+							in={isClickedLoginButton}
+							timeout={300}
+							unmountOnExit
+							classNames='auth'
+						>
+							<LoginForm
+								setIsClickedLoginButton={() =>
+									setIsClickedLoginButton(!isClickedLoginButton)
+								}
+							/>
+						</CSSTransition>
+					</div>
 				</div>
 			</div>
 		</div>
