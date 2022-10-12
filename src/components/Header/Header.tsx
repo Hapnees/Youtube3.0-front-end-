@@ -1,14 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HedaerInput from '../ui/Header/HeaderInput/HeaderInput'
 import HeaderMenu from './HeaderMenu/HeaderMenu'
 import cl from './Header.module.scss'
 import LoginButton from '../ui/Header/LoginButton/LoginButton'
 import LoginForm from '../AuthForm/LoginForm/LoginForm'
 import { CSSTransition } from 'react-transition-group'
+import { useLoginMutation } from '../../api/auth.api'
 
 const Header = () => {
 	const [isClickedLoginButton, setIsClickedLoginButton] =
 		useState<boolean>(false)
+
+	// useEffect(() => {
+	// 	console.log(data)
+	// }, [data])
 
 	return (
 		<div className={cl.wrapper}>
@@ -32,11 +37,7 @@ const Header = () => {
 							unmountOnExit
 							classNames='auth'
 						>
-							<LoginForm
-								setIsClickedLoginButton={() =>
-									setIsClickedLoginButton(!isClickedLoginButton)
-								}
-							/>
+							<LoginForm setIsClickedLoginButton={setIsClickedLoginButton} />
 						</CSSTransition>
 					</div>
 				</div>

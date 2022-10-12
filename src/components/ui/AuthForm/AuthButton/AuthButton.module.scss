@@ -1,11 +1,11 @@
 .base {
-	@apply w-[150px] border py-[2px] mx-auto rounded-md duration-300;
+	@apply w-[150px] border border-transparent font-semibold text-lg py-[2px] mx-auto rounded-md duration-300;
 }
 
 .special {
-	@apply bg-[#bc2626] border-transparent hover:bg-[#9c1f1f];
+	@apply bg-[#bc2626] hover:bg-[#9c1f1f];
 }
 
 .non_special {
-	@apply bg-transparent border-gray-700;
+	@apply bg-transparent hover:border-gray-700 font-normal text-base;
 }

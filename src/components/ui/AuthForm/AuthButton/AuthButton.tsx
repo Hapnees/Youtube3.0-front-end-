@@ -8,7 +8,7 @@ const AuthButton: FC<IAuthButton> = ({ isSpecial, children, ...props }) => {
 		: `${cl.base} ${cl.non_special}`
 	return (
 		<button className={authButtonClass} {...props}>
-			<p className='font-semibold text-lg'>{children}</p>
+			{children}
 		</button>
 	)
 }

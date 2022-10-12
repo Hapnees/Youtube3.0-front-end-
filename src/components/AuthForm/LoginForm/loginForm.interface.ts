@@ -1,3 +1,5 @@
+import React from 'react'
+
 export interface ILoginForm {
-	setIsClickedLoginButton: () => void
+	setIsClickedLoginButton: React.Dispatch<React.SetStateAction<boolean>>
 }
