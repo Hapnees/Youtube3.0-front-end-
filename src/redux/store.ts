@@ -11,6 +11,7 @@ import {
 	REGISTER,
 } from 'redux-persist'
 import { authSlice } from './slices/auth.slice'
+import { ErrorHandler } from '../middleware/error-handler.middleware'
 
 const persistConfig = {
 	key: 'root',
@@ -31,9 +32,17 @@ const store = configureStore({
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware({
 			serializableCheck: {
-				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+				ignoredActions: [
+					FLUSH,
+					REHYDRATE,
+					PAUSE,
+					PERSIST,
+					PURGE,
+					REGISTER,
+					authSlice.actions.removeUser.toString(),
+				],
 			},
-		}).concat(authApi.middleware),
+		}).concat([authApi.middleware, ErrorHandler]),
 })
 
 export default store

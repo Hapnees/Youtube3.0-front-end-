@@ -1,7 +1,9 @@
 import React, { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AiOutlineClose } from 'react-icons/ai'
+import { toast } from 'react-toastify'
 import { useRegisterMutation } from '../../../api/auth.api'
+import { toastConfig } from '../../../config/toast.config'
 import { useActions } from '../../../hooks/useActions'
 import { IRegisterFields } from '../../../models/register/registerFields.interface'
 import AuthButton from '../../ui/AuthForm/AuthButton/AuthButton'
@@ -26,12 +28,15 @@ const RegisterForm: FC<IRegisterForm> = ({
 
 	// Заносим данные в auth при регистрации
 	useEffect(() => {
-		if (registerData) setAuthUser(registerData)
+		if (registerData) {
+			setAuthUser(registerData)
+			setIsClickedRegisterButton(false)
+			toast.success('Вы успешно зарегестрировались', toastConfig)
+		}
 	}, [registerData])
 
 	const onSubmit: SubmitHandler<IRegisterFields> = data => {
 		registerUser(data)
-		setIsClickedRegisterButton(false)
 	}
 
 	return (

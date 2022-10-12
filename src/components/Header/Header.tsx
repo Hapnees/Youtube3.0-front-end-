@@ -9,7 +9,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector'
 
 const Header = () => {
 	const { user } = useTypedSelector(state => state.auth)
-	const isAuth = !!user
+	const isAuth = !!user.id
 
 	const [isClickedLoginButton, setIsClickedLoginButton] =
 		useState<boolean>(false)

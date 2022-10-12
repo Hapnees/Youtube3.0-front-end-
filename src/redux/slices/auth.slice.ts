@@ -14,6 +14,9 @@ export const authSlice = createSlice({
 		setAuthUser: (state, action: PayloadAction<IAuthSlice>) => {
 			state.user = action.payload
 		},
+		removeUser: state => {
+			state.user = { email: '', username: '', token: '', id: 0 }
+		},
 	},
 })
 
