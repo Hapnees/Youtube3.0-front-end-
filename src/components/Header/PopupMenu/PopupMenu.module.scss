@@ -1,3 +1,35 @@
 .menu {
-	@apply absolute;
+	@apply absolute bg-[#131313] w-[150px] right-0 top-9 rounded-b-md;
+	box-shadow: 0 0 5px black;
+
+	> li {
+		@apply py-1 cursor-pointer;
+
+		> p {
+			@apply px-2;
+		}
+
+		&:after {
+			content: '';
+			display: block;
+			width: 0;
+			height: 1.5px;
+			margin-top: 5px;
+			background-color: #bc2626;
+		}
+
+		&:hover:after {
+			animation: bar 0.3s;
+			width: 100%;
+		}
+	}
+}
+
+@keyframes bar {
+	from {
+		width: 0;
+	}
+	to {
+		width: 100%;
+	}
 }

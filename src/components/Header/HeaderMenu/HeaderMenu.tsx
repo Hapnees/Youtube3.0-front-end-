@@ -4,6 +4,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useTypedSelector } from '../../../hooks/useTypedSelector'
 import PopupMenu from '../PopupMenu/PopupMenu'
 import cl from './HeaderMenu.module.scss'
+import { CSSTransition } from 'react-transition-group'
 
 const HeaderMenu = () => {
 	const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
@@ -19,11 +20,26 @@ const HeaderMenu = () => {
 			/>
 
 			<div className='relative'>
-				<div className={cl.username__container}>
-					<p className='font-semibold'>{username}</p>
-					<MdKeyboardArrowDown size={18} />
+				<div
+					className={cl.username__container}
+					onClick={() => setIsOpenPopup(!isOpenPopup)}
+				>
+					<p className='font-semibold tracking-wide'>{username}</p>
+					{isOpenPopup ? (
+						<MdKeyboardArrowDown size={18} className='rotate-180' />
+					) : (
+						<MdKeyboardArrowDown size={18} />
+					)}
 				</div>
-				<PopupMenu />
+
+				<CSSTransition
+					in={isOpenPopup}
+					timeout={300}
+					unmountOnExit
+					classNames='popup'
+				>
+					<PopupMenu />
+				</CSSTransition>
 			</div>
 		</div>
 	)

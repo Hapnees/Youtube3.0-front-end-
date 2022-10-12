@@ -15,7 +15,8 @@
 body {
 	background-color: $main_bg_color;
 	color: $main_text_color;
-	font-family: Montserrat;
+	font-family: Roboto;
+	//Montserrat;
 }
 
 // AUTHFORM ANIMATION
@@ -35,5 +36,26 @@ body {
 .auth-exit-active {
 	opacity: 0;
 	transform: scale(0.9);
+	transition: opacity 300ms, transform 300ms;
+}
+
+// POPUPMENU ANIMATION
+
+.popup-enter {
+	opacity: 0;
+	transform: translateY(-10%);
+}
+.popup-enter-active {
+	opacity: 1;
+	transform: translateY(0);
+	transition: opacity 300ms, transform 300ms;
+}
+.popup-exit {
+	opacity: 1;
+	transform: translateY(0);
+}
+.popup-exit-active {
+	opacity: 0;
+	transform: translateY(-10%);
 	transition: opacity 300ms, transform 300ms;
 }
