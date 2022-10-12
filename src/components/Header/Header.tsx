@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import HedaerInput from '../ui/Header/HeaderInput/HeaderInput'
 import HeaderMenu from './HeaderMenu/HeaderMenu'
 import cl from './Header.module.scss'
 import LoginButton from '../ui/Header/LoginButton/LoginButton'
 import LoginForm from '../AuthForm/LoginForm/LoginForm'
 import { CSSTransition } from 'react-transition-group'
-import { useLoginMutation } from '../../api/auth.api'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
 
 const Header = () => {
+	const { user } = useTypedSelector(state => state.auth)
+	const isAuth = !!user
+
 	const [isClickedLoginButton, setIsClickedLoginButton] =
 		useState<boolean>(false)
-
-	// useEffect(() => {
-	// 	console.log(data)
-	// }, [data])
 
 	return (
 		<div className={cl.wrapper}>
@@ -25,21 +24,24 @@ const Header = () => {
 				<div className={cl.section__2}>
 					<HedaerInput placeholder='Поиск...' />
 
-					{/* <HeaderMenu /> */}
-					<div className='relative'>
-						<LoginButton
-							isClickedLoginButton={isClickedLoginButton}
-							onClick={() => setIsClickedLoginButton(!isClickedLoginButton)}
-						/>
-						<CSSTransition
-							in={isClickedLoginButton}
-							timeout={300}
-							unmountOnExit
-							classNames='auth'
-						>
-							<LoginForm setIsClickedLoginButton={setIsClickedLoginButton} />
-						</CSSTransition>
-					</div>
+					{isAuth ? (
+						<HeaderMenu />
+					) : (
+						<div className='relative'>
+							<LoginButton
+								isClickedLoginButton={isClickedLoginButton}
+								onClick={() => setIsClickedLoginButton(!isClickedLoginButton)}
+							/>
+							<CSSTransition
+								in={isClickedLoginButton}
+								timeout={300}
+								unmountOnExit
+								classNames='auth'
+							>
+								<LoginForm setIsClickedLoginButton={setIsClickedLoginButton} />
+							</CSSTransition>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

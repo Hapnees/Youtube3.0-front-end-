@@ -24,6 +24,7 @@ const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
 	// Заносим данные в auth при логине
 	useEffect(() => {
 		if (loginData) setAuthUser(loginData)
+		console.log(loginData)
 	}, [loginData])
 
 	const onClickRegister = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,7 +34,8 @@ const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
 
 	const onSubmit: SubmitHandler<ILoginFields> = data => {
 		loginUser(data)
-		setIsClickedLoginButton(false)
+		if (loginData) setAuthUser(loginData)
+		// setIsClickedLoginButton(false)
 	}
 
 	return (
