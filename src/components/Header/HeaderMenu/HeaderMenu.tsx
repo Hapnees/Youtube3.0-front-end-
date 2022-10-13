@@ -38,7 +38,7 @@ const HeaderMenu = () => {
 					unmountOnExit
 					classNames='popup'
 				>
-					<PopupMenu />
+					<PopupMenu setIsOpen={setIsOpenPopup} />
 				</CSSTransition>
 			</div>
 		</div>

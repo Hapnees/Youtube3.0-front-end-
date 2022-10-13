@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import MainLayout from './layouts/MainLayot/MainLayout'
-import HomePage from './pages/HomePage'
+import HomePage from './pages/HomePage/HomePage'
 
 const ProfilePage = React.lazy(
-	() => import(/* webpackChunkName: "ProfilePage" */ './pages/ProfilePage')
+	() => import(/* webpackChunkName: "ProfilePage" */ './pages/ProfilePage/ProfilePage')
 )
 
 function App() {
