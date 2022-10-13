@@ -30,7 +30,7 @@ const MainLayout = () => {
 					toast.error('Пользователь не найден', toastConfig)
 					clearInterval(refreshInterval)
 				}
-			}, 840_000)
+			}, 900_000)
 		}
 	}, [isAuth])
 
