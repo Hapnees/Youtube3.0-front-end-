@@ -5,12 +5,8 @@
 		content: '';
 		@apply block bg-[#292929] h-[2px] mt-1 w-[80%];
 	}
+}
 
-	> li {
-		@apply flex items-center gap-3 text-[#616161] cursor-pointer;
-
-		> p {
-			@apply tracking-wide;
-		}
-	}
+.menu_sub {
+	@apply flex flex-col gap-6 my-6;
 }

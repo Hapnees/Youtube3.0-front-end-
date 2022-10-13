@@ -1,0 +1,6 @@
+@import '../../../../styles/variables.scss';
+
+.container {
+	@apply flex items-center gap-2;
+	color: $main_menu__text__color;
+}

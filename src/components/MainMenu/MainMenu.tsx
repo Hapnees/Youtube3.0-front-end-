@@ -8,6 +8,7 @@ import { MdSubscriptions } from 'react-icons/md'
 import { TbPlaylist } from 'react-icons/tb'
 import MainMenuElement from '../ui/MainMenuUI/MainMenuElement/MainMenuElement'
 import { mainMenuElementConfig } from '../../config/mainMenuElement.config'
+import SubscriberCard from '../ui/MainMenuUI/SubscriberCard/SubscriberCard'
 
 const MainMenu = () => {
 	return (
@@ -44,11 +45,11 @@ const MainMenu = () => {
 				</div>
 			</ul>
 			<p className='uppercase text-[#3c3c3c] tracking-wider'>Подписки</p>
-			<ul>
-				<li>
-					<img src='' alt='' />
-					<p>Влад Бумага</p>
-				</li>
+			<ul className={cl.menu_sub}>
+				<SubscriberCard />
+				<SubscriberCard />
+				<SubscriberCard />
+				<SubscriberCard />
 			</ul>
 		</div>
 	)

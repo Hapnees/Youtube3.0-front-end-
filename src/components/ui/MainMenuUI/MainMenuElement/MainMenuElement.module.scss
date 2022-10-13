@@ -1,0 +1,10 @@
+@import '../../../../styles/variables.scss';
+
+.container {
+	@apply flex items-center gap-3  cursor-pointer;
+	color: $main_menu__text__color;
+
+	> p {
+		@apply tracking-wide;
+	}
+}
