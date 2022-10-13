@@ -12,10 +12,7 @@ import { useActions } from '../../../hooks/useActions'
 import { IError } from '../../../models/error/error.interface'
 
 const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
-	const [
-		loginUser,
-		{ data: loginData, isError: isLoginError, error: loginError },
-	] = useLoginMutation()
+	const [loginUser, { data: loginData }] = useLoginMutation()
 	const { setAuthUser } = useActions()
 	const [isClickedRegister, setIsClickedRegister] = useState<boolean>(false)
 	const {
@@ -33,13 +30,6 @@ const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
 		}
 	}, [loginData])
 
-	// Ловим ошибку логина
-	// useEffect(() => {
-	// 	if (isLoginError) {
-	// 		const _error = (loginError as IError).data.message
-	// 	}
-	// }, [isLoginError])
-
 	const onClickRegister = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault()
 		setIsClickedRegister(true)
@@ -48,7 +38,6 @@ const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
 	const onSubmit: SubmitHandler<ILoginFields> = data => {
 		loginUser(data)
 		if (loginData) setAuthUser(loginData)
-		// setIsClickedLoginButton(false)
 	}
 
 	return (

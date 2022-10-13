@@ -1,17 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useActions } from '../../../hooks/useActions'
 import cl from './PopupMenu.module.scss'
 
 const PopupMenu = () => {
 	const { removeUser } = useActions()
+	const navigate = useNavigate()
 
 	return (
 		<ul className={cl.menu}>
-			<li>
-				<p>
-					<Link to='/profile'>Профиль</Link>
-				</p>
+			<li onClick={() => navigate('/profile')}>
+				<p>Профиль</p>
 			</li>
 			<li onClick={removeUser}>
 				<p>Выйти</p>

@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiFillHome, AiFillLike, AiOutlineHistory } from 'react-icons/ai'
 import { FiTrendingUp } from 'react-icons/fi'
 import { MdSubscriptions } from 'react-icons/md'
 import { TbPlaylist } from 'react-icons/tb'
 
 import { mainMenuElementConfig } from '../../../config/mainMenuElement.config'
+import { useActions } from '../../../hooks/useActions'
+import { useTypedSelector } from '../../../hooks/useTypedSelector'
 import MainMenuElement from '../../ui/MainMenuUI/MainMenuElementComponent/MainMenuElement'
 import cl from './MainMenuCategories.module.scss'
 
 const MainMenuCategories = () => {
+	const { category } = useTypedSelector(state => state.mainMenuCategories)
+	const { setChecks } = useActions()
 	const detailClass = 'bg-[#c33636] text-white'
 	const [menu, setMenu] = useState([
 		{
@@ -132,6 +136,21 @@ const MainMenuCategories = () => {
 			isChecked: false,
 		},
 	])
+
+	// Заносим данные из mainMenuCategoriesSlice в menu при первом запуске
+	useEffect(() => {
+		const _menu = menu.map(el => ({
+			...el,
+			isChecked: category.find(_el => _el.id === el.id)?.isChecked || false,
+		}))
+		setMenu(_menu)
+	}, [])
+
+	// Заносим данные в mainMenuCategoriesSlice при изменении menu
+	useEffect(() => {
+		const _menu = menu.map(el => ({ id: el.id, isChecked: el.isChecked }))
+		setChecks(_menu)
+	}, [menu])
 
 	const handleClickMainMenuItem = (id: number) => {
 		const copy = menu.map(el =>

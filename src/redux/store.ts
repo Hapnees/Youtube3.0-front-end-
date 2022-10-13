@@ -12,17 +12,22 @@ import {
 } from 'redux-persist'
 import { authSlice } from './slices/auth.slice'
 import { ErrorHandler } from '../middleware/error-handler.middleware'
+import {
+	mainMenuCategoriesReducer,
+	mainMenuCategoriesSlice,
+} from './slices/mainMenuCategories.slice'
 
 const persistConfig = {
 	key: 'root',
 	version: 1,
 	storage,
-	whitelist: [authSlice.name],
+	whitelist: [authSlice.name, mainMenuCategoriesSlice.name],
 }
 
 const rootReducer = combineReducers({
 	[authApi.reducerPath]: authApi.reducer,
 	auth: authSlice.reducer,
+	mainMenuCategories: mainMenuCategoriesReducer,
 })
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer)

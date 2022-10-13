@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import cl from './MainMenu.module.scss'
 import SubscriberCard from '../ui/MainMenuUI/SubscriberCard/SubscriberCard'
 import MainMenuCategories from './MainMenuCategories/MainMenuCategories'
