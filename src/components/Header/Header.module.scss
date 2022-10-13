@@ -1,9 +1,12 @@
+@import '../../styles/variables.scss';
+
 .wrapper {
 	box-shadow: 0 0 15px rgb(74, 70, 70);
 }
 
 .container {
-	@apply sticky w-[1700px] mx-auto py-2 flex items-center;
+	@apply sticky mx-auto py-[10px] flex items-center;
+	width: $main_width;
 }
 
 .section__1 {

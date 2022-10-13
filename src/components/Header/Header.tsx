@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import HedaerInput from '../ui/Header/HeaderInput/HeaderInput'
+import HedaerInput from '../ui/HeaderUI/HeaderInput/HeaderInput'
 import HeaderMenu from './HeaderMenu/HeaderMenu'
 import cl from './Header.module.scss'
-import LoginButton from '../ui/Header/LoginButton/LoginButton'
+import LoginButton from '../ui/HeaderUI/LoginButton/LoginButton'
 import LoginForm from '../AuthForm/LoginForm/LoginForm'
 import { CSSTransition } from 'react-transition-group'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
 	const { user } = useTypedSelector(state => state.auth)
@@ -18,7 +19,9 @@ const Header = () => {
 		<div className={cl.wrapper}>
 			<div className={cl.container}>
 				<div className={cl.section__1}>
-					<p className='font-bold text-3xl'>Youtube 3.0</p>
+					<Link to='/'>
+						<p className='font-bold text-3xl'>Youtube 3.0</p>
+					</Link>
 				</div>
 
 				<div className={cl.section__2}>

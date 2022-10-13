@@ -1,0 +1,16 @@
+.menu__body {
+	@apply flex flex-col gap-4 my-6;
+
+	&:after {
+		content: '';
+		@apply block bg-[#292929] h-[2px] mt-1 w-[80%];
+	}
+
+	> li {
+		@apply flex items-center gap-3 text-[#616161] cursor-pointer;
+
+		> p {
+			@apply tracking-wide;
+		}
+	}
+}

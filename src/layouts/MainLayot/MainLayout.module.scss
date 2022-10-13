@@ -1,0 +1,6 @@
+@import '../../styles/variables.scss';
+
+.container {
+	@apply mx-auto;
+	width: $main_width;
+}
