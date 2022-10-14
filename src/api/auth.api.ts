@@ -22,17 +22,16 @@ export const authApi = createApi({
 				body,
 			}),
 		}),
-		refresh: build.mutation<ILoginGet, string>({
-			query: token => ({
-				url: 'auth/refresh',
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}),
-		}),
+		// refresh: build.mutation<ILoginGet, string>({
+		// 	query: token => ({
+		// 		url: 'auth/refresh',
+		// 		method: 'POST',
+		// 		headers: {
+		// 			Authorization: `Bearer ${token}`,
+		// 		},
+		// 	}),
+		// }),
 	}),
 })
 
-export const { useRegisterMutation, useLoginMutation, useRefreshMutation } =
-	authApi
+export const { useRegisterMutation, useLoginMutation } = authApi

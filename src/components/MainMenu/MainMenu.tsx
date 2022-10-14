@@ -5,7 +5,7 @@ import MainMenuCategories from './MainMenuCategories/MainMenuCategories'
 
 const MainMenu = () => {
 	return (
-		<div className='py-6 font-semibold w-[290px]'>
+		<div className={cl.container}>
 			<div className='w-[230px]'>
 				<MainMenuCategories />
 				<div className='pl-2'>

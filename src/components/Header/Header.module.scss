@@ -5,8 +5,8 @@
 }
 
 .container {
-	@apply sticky mx-auto py-[10px] flex items-center;
-	width: $main_width;
+	@apply sticky flex items-center;
+	padding: 10px $main__spaceX;
 }
 
 .section__1 {
