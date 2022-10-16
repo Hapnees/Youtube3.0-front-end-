@@ -7,15 +7,29 @@ export const userApi = createApi({
 	reducerPath: 'userApi',
 	tagTypes: ['User'],
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://localhost:4000/api/user/profile',
+		baseUrl: 'http://localhost:4000/api/user',
 	}),
 	endpoints: build => ({
 		getProfile: build.query<IUserGet, string>({
 			query: token => ({
-				url: '/',
+				url: 'profile',
 				headers: { Authorization: `Bearer ${token}` },
 			}),
 			providesTags: ['User'],
+		}),
+
+		getProfileByUsername: build.query<IUserGet, string>({
+			query: username => ({
+				url: `/${username}`,
+			}),
+			providesTags: ['User'],
+		}),
+
+		getProfileById: build.query<IUserGet, number>({
+			query: id => ({
+				url: '/',
+				params: { id },
+			}),
 		}),
 
 		updateProfile: build.mutation<
@@ -23,7 +37,7 @@ export const userApi = createApi({
 			{ token: string; userData: IUserUpdate }
 		>({
 			query: ({ token, userData }) => ({
-				url: 'update',
+				url: 'profile/update',
 				method: 'PUT',
 				headers: { Authorization: `Bearer ${token}` },
 				body: userData,
@@ -33,4 +47,10 @@ export const userApi = createApi({
 	}),
 })
 
-export const { useGetProfileQuery, useUpdateProfileMutation } = userApi
+export const {
+	useGetProfileQuery,
+	useUpdateProfileMutation,
+	useGetProfileByUsernameQuery,
+	useLazyGetProfileByIdQuery,
+	useGetProfileByIdQuery,
+} = userApi

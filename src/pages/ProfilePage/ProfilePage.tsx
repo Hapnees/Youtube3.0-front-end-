@@ -10,22 +10,18 @@ import Loader from '../../components/ui/LoaderUI/Loader'
 
 const ProfilePage = () => {
 	const navigate = useNavigate()
-	const {
-		user: { token },
-	} = useTypedSelector(state => state.auth)
+	const { user } = useTypedSelector(state => state.auth)
 	const { data: profileData, isLoading: isLoadingProfileData } =
-		useGetProfileQuery(token || '')
-
-	console.log(profileData?.videos)
+		useGetProfileQuery(user.token || '')
 
 	// Проверка на токен
 	useEffect(() => {
-		if (!token) {
+		if (!user.token) {
 			setTimeout(() => {
 				navigate('/')
 			}, 2000)
 		}
-	}, [token])
+	}, [user.token])
 
 	return (
 		<>
@@ -75,7 +71,7 @@ const ProfilePage = () => {
 							</div>
 						</div>
 					</div>
-					<VideoGrid videos={profileData?.videos || []} />
+					<VideoGrid videos={profileData?.videos || []} user={user} />
 				</div>
 			)}
 		</>

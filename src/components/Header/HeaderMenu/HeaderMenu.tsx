@@ -25,10 +25,12 @@ const HeaderMenu = () => {
 					/>
 				</Link>
 			) : (
-				<FaUserAlt
-					className='border border-white p-1 rounded-full cursor-pointer'
-					size={40}
-				/>
+				<Link to='/profile'>
+					<FaUserAlt
+						className='border-2 border-white p-1 rounded-full cursor-pointer hover:border-blue-400 hover:border-dashed hover:scale-110 duration-300'
+						size={40}
+					/>
+				</Link>
 			)}
 
 			<div className='relative'>

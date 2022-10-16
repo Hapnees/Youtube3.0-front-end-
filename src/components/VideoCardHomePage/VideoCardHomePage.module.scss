@@ -1,0 +1,24 @@
+@import '../../styles/variables.scss';
+
+.container {
+	@apply flex flex-col gap-2 rounded-md bg-[#171717] pb-2 cursor-pointer self-start;
+	box-shadow: 0 0 5px black;
+	width: $card__width;
+}
+
+.thumbnail__container {
+	@apply relative;
+	height: $card__height;
+}
+
+.duration {
+	@apply absolute text-white bottom-2 right-3 px-2 py-1 rounded-md;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.title:first-of-type {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}

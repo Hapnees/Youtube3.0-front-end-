@@ -1,19 +1,18 @@
-import React, { FC } from 'react'
-import testAvatar from '../../assets/img/ava.jpg'
+import React, { FC, useState } from 'react'
+import testAvatar from '../../assets/img/profile.png'
 import cl from './VideoCard.module.scss'
 import { IVideoGet } from '../../models/video/video-get.interface'
-import { useTypedSelector } from '../../hooks/useTypedSelector'
-import { dateFormat } from '../../utils/date.format'
+import { dateAgoFormat } from '../../utils/dateAgo.format'
+import { IUserGet } from '../../models/user/user-get.interface'
+import { IAuthSlice } from '../../models/auth/auth.interface'
+import { numberFormat } from '../../utils/number.format'
 
 interface IVideoCard {
 	video: IVideoGet
+	user: IUserGet | IAuthSlice
 }
 
-const VideoCard: FC<IVideoCard> = ({ video }) => {
-	const {
-		user: { avatarPath, username },
-	} = useTypedSelector(state => state.auth)
-	console.log(video)
+const VideoCard: FC<IVideoCard> = ({ video, user }) => {
 	return (
 		<div className={cl.container}>
 			<div className={cl.thumbnail__container}>
@@ -27,7 +26,7 @@ const VideoCard: FC<IVideoCard> = ({ video }) => {
 
 			<div className='flex gap-2 px-3'>
 				<img
-					src={avatarPath}
+					src={(!!user && user.avatarPath) || testAvatar}
 					alt=''
 					width={55}
 					className='rounded-full p-1 border border-zinc-400 h-full'
@@ -36,17 +35,17 @@ const VideoCard: FC<IVideoCard> = ({ video }) => {
 					<div>
 						<p className={cl.title}>{video.title}</p>
 						<p className='text-zinc-400 w-full whitespace-nowrap overflow-hidden text-ellipsis'>
-							{username}
+							{user && user.username}
 						</p>
 
 						<div className='flex gap-2 text-zinc-400 whitespace-nowrap'>
 							<div className='flex gap-1'>
 								<p className='max-w-[40px] overflow-hidden text-ellipsis'>
-									{video.views}
+									{numberFormat(video.views)}
 								</p>
 								<p>просмотров</p>
 							</div>
-							<p>{dateFormat(video.createdAt)}</p>
+							<p>{dateAgoFormat(video.createdAt)}</p>
 						</div>
 					</div>
 				</div>
