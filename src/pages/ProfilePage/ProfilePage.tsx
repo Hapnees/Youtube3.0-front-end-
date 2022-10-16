@@ -5,6 +5,7 @@ import SubscribeButton from '../../components/ui/ProfileUI/SubscribeButton/Subsc
 import { useNavigate } from 'react-router-dom'
 import { useGetProfileQuery } from '../../api/user.api'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
+import VideoGrid from '../../components/ui/VideoGridUI/VideoGrid'
 
 const ProfilePage = () => {
 	const navigate = useNavigate()
@@ -23,44 +24,44 @@ const ProfilePage = () => {
 	}, [token])
 
 	return (
-		<div className='grow'>
-			<div className={cl.header}></div>
-
-			<div className={cl.info}>
-				<div className='flex flex-col h-full mx-20'>
-					<div className='flex items-center justify-between grow'>
-						<div className='flex items-center gap-4'>
-							<img
-								src={profileData?.avatarPath || profileIcon}
-								alt='profileIcon'
-								width={70}
-								className='rounded-full'
-							/>
-							<div>
-								<p className='text-2xl'>
-									{profileData?.username || 'username'}
-								</p>
-								<p className='text-zinc-400'>31 тыс. подписчиков</p>
+		<div className='flex flex-col gap-4 grow'>
+			<div>
+				<div className={cl.header}></div>
+				<div className={cl.info}>
+					<div className='flex flex-col h-full mx-20'>
+						<div className='flex items-center justify-between grow'>
+							<div className='flex items-center gap-4'>
+								<img
+									src={profileData?.avatarPath || profileIcon}
+									alt='profileIcon'
+									width={70}
+									className='rounded-full'
+								/>
+								<div>
+									<p className='text-2xl'>
+										{profileData?.username || 'username'}
+									</p>
+									<p className='text-zinc-400'>31 тыс. подписчиков</p>
+								</div>
 							</div>
-						</div>
 
-						<div className='h-[3.9em] flex items-center'>
-							<p className='text-zinc-400 w-[600px] leading-[1.3em] tracking-wide overflow-hidden'>
-								{profileData?.description}
-							</p>
-						</div>
+							<div>
+								<p className={cl.description}>{profileData?.description}</p>
+							</div>
 
-						<SubscribeButton onClick={() => navigate('edit')}>
-							Редактировать
-						</SubscribeButton>
+							<SubscribeButton onClick={() => navigate('edit')}>
+								Редактировать
+							</SubscribeButton>
+						</div>
+						<ul className={cl.menu}>
+							<li>Видео</li>
+							<li>Плейлисты</li>
+							<li>О канале</li>
+						</ul>
 					</div>
-					<ul className={cl.menu}>
-						<li>Видео</li>
-						<li>Плейлисты</li>
-						<li>О канале</li>
-					</ul>
 				</div>
 			</div>
+			<VideoGrid />
 		</div>
 	)
 }

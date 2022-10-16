@@ -22,6 +22,7 @@ interface IAddVideoDetailsProps {
 }
 
 const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
+	const [isComplete, setIsComplete] = useState(false)
 	const { setIsOpenModalWindow } = useActions()
 	const [progress, setProgress] = useState<number>(0)
 
@@ -140,11 +141,11 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 				file: dataSubmit,
 				token: token || '',
 			})
-
+			setIsComplete(true)
+			toast.success(addVideoData.data.message, toastConfig)
 			setTimeout(() => {
 				setIsOpenModalWindow(false)
 			}, 3000)
-			toast.success(addVideoData.data.message, toastConfig)
 		} catch (e) {
 			toast.error(e, toastConfig)
 		}
@@ -186,7 +187,7 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 								<img
 									src={thumbnailUrl}
 									alt='thumbnailImg'
-									className='object-cover w-full h-full'
+									className='object-cover w-full h-full rounded-md'
 								/>
 							</>
 						)}
@@ -216,6 +217,19 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 							</div>
 							<BsCheckLg className='bg-green-600 p-1 rounded-full' size={27} />
 						</>
+					)}
+					{progress === 100 && (
+						<div className='flex gap-2'>
+							<p className='text-green-400'>Добавление видео</p>
+							{!isComplete ? (
+								<div className={cl.circle}></div>
+							) : (
+								<BsCheckLg
+									className='bg-green-600 p-1 rounded-full'
+									size={27}
+								/>
+							)}
+						</div>
 					)}
 				</div>
 				<SubscribeButton>Добавить</SubscribeButton>

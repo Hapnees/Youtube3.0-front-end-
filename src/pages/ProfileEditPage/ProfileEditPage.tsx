@@ -141,7 +141,11 @@ const ProfileEditPage = () => {
 			dataSubmit.headerPath = headerData.url
 		}
 
-		setAuthUser({ username: dataSubmit.username, email: dataSubmit.email })
+		setAuthUser({
+			username: dataSubmit.username,
+			email: dataSubmit.email,
+			avatarPath: dataSubmit.avatarPath,
+		})
 		updateProfile({
 			token: token || '',
 			userData: dataSubmit,

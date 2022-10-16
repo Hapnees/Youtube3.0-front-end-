@@ -5,6 +5,7 @@ import { IUserUpdate } from '../models/user/user-update.interface'
 
 export const userApi = createApi({
 	reducerPath: 'userApi',
+	tagTypes: ['User'],
 	baseQuery: fetchBaseQuery({
 		baseUrl: 'http://localhost:4000/api/user/profile',
 	}),
@@ -14,6 +15,7 @@ export const userApi = createApi({
 				url: '/',
 				headers: { Authorization: `Bearer ${token}` },
 			}),
+			providesTags: ['User'],
 		}),
 
 		updateProfile: build.mutation<
@@ -26,6 +28,7 @@ export const userApi = createApi({
 				headers: { Authorization: `Bearer ${token}` },
 				body: userData,
 			}),
+			invalidatesTags: result => [{ type: 'User', username: result?.username }],
 		}),
 	}),
 })

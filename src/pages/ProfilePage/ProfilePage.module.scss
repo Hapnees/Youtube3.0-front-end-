@@ -19,3 +19,12 @@
 		}
 	}
 }
+
+.description {
+	@apply text-zinc-400 tracking-wide;
+	width: 600px;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
