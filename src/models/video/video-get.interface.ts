@@ -1,3 +1,5 @@
+import { IUserGetMini } from '../user/user-get-mini.interface'
+
 export interface IVideoGet {
 	id: number
 	vid: number
@@ -9,4 +11,6 @@ export interface IVideoGet {
 	dislikes: number
 	thumbnailPath: string
 	videoPath: string
+	user: IUserGetMini
+	createdAt: Date
 }

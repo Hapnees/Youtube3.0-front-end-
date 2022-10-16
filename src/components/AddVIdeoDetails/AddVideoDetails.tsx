@@ -160,6 +160,7 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 						placeholder='Название видео'
 						className={cl.input}
 						{...register('title')}
+						autoComplete='off'
 					/>
 					<textarea
 						rows={7}

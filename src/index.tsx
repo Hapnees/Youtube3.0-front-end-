@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { toastContainerConfig } from './config/toast.config'
+import Loader from './components/ui/LoaderUI/Loader'
 
 const persistor = persistStore(store)
 
@@ -18,7 +19,7 @@ root.render(
 	<BrowserRouter>
 		<ToastContainer {...toastContainerConfig} />
 		<Provider store={store}>
-			<PersistGate loading={null} persistor={persistor}>
+			<PersistGate loading={<Loader />} persistor={persistor}>
 				<App />
 			</PersistGate>
 		</Provider>
