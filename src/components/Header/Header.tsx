@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import HedaerInput from '../ui/HeaderUI/HeaderInput/HeaderInput'
 import HeaderMenu from './HeaderMenu/HeaderMenu'
 import cl from './Header.module.scss'

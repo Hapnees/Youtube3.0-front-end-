@@ -3,6 +3,7 @@ import { FieldError } from 'react-hook-form'
 
 interface IAuthInput {
 	error?: FieldError
+	horizontal?: boolean
 }
 
 type TypeInputPropsField = InputHTMLAttributes<HTMLInputElement> & IAuthInput

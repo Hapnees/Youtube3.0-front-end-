@@ -1,0 +1,60 @@
+$checkbox__size: 20px;
+$mark__size: 12px;
+
+.input {
+	width: 100%;
+}
+
+.thumbnail {
+	@apply relative block border-2 border-transparent w-[360px] h-[200px] cursor-pointer
+	hover:border-blue-500 duration-300;
+}
+
+.duration {
+	@apply absolute text-white bottom-2 right-3 px-2 py-1 rounded-md;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.checkbox {
+	position: relative;
+	align-self: flex-start;
+}
+
+.checkbox__input {
+	appearance: none;
+	-webkit-appearance: none;
+	position: absolute;
+
+	&:checked + .checkbox__label:after {
+		opacity: 1;
+	}
+}
+
+.checkbox__label {
+	@apply flex gap-2 items-center cursor-pointer text-zinc-400;
+
+	&:before {
+		content: '';
+		display: block;
+		width: $checkbox__size;
+		height: $checkbox__size;
+
+		@apply border border-[#EB5C2A] rounded-md;
+	}
+
+	&:after {
+		content: '';
+		display: block;
+		width: $mark__size;
+		height: $mark__size;
+		top: 6px;
+		bottom: 0;
+		right: 0;
+		left: 4px;
+
+		background: url('../../assets/img/check-mark.png') no-repeat;
+		background-size: cover;
+		position: absolute;
+		opacity: 0;
+	}
+}

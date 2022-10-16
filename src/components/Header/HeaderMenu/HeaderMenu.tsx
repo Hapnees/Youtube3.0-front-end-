@@ -9,15 +9,24 @@ import { CSSTransition } from 'react-transition-group'
 const HeaderMenu = () => {
 	const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
 	const {
-		user: { username },
+		user: { username, avatarPath },
 	} = useTypedSelector(state => state.auth)
 
 	return (
 		<div className={cl.container}>
-			<FaUserAlt
-				className='border border-white p-1 rounded-full cursor-pointer'
-				size={40}
-			/>
+			{avatarPath ? (
+				<img
+					src={avatarPath}
+					alt=''
+					width={40}
+					className='object-cover rounded-full'
+				/>
+			) : (
+				<FaUserAlt
+					className='border border-white p-1 rounded-full cursor-pointer'
+					size={40}
+				/>
+			)}
 
 			<div className='relative'>
 				<div

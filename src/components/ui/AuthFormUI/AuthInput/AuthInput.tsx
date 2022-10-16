@@ -4,10 +4,11 @@ import cl from './AuthInput.module.scss'
 import { BiErrorCircle } from 'react-icons/bi'
 
 const AuthInput = forwardRef<HTMLInputElement, IField>(
-	({ error, ...props }, ref) => {
+	({ error, horizontal = false, className, ...props }, ref) => {
+		const horizontalClass = 'flex gap-2'
 		return (
-			<div>
-				<input {...props} className={cl.input} ref={ref} />
+			<div className={horizontal ? 'flex gap-4' : ''}>
+				<input {...props} className={`${cl.input} ${className}`} ref={ref} />
 				{error?.message && (
 					<div className='flex items-center gap-1 mt-1'>
 						<BiErrorCircle color='#e84545' size={18} />

@@ -3,4 +3,5 @@ export interface IRegisterGet {
 	username: string
 	email: string
 	token: string
+	avatarPath: string
 }

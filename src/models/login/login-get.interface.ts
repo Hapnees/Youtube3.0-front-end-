@@ -3,4 +3,5 @@ export interface ILoginGet {
 	username: string
 	email: string
 	token: string
+	avatarPath: string
 }

@@ -12,10 +12,14 @@ export const authSlice = createSlice({
 	initialState,
 	reducers: {
 		setAuthUser: (state, action: PayloadAction<IAuthSlice>) => {
-			state.user = action.payload
+			state.user.id = action.payload.id || state.user.id
+			state.user.username = action.payload.username || state.user.username
+			state.user.email = action.payload.email || state.user.email
+			state.user.token = action.payload.token || state.user.token
+			state.user.avatarPath = action.payload.avatarPath || state.user.avatarPath
 		},
 		removeUser: state => {
-			state.user = { email: '', username: '', token: '', id: 0 }
+			state.user = { email: '', username: '', token: '', avatarPath: '', id: 0 }
 		},
 	},
 })

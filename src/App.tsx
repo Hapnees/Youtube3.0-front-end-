@@ -4,7 +4,17 @@ import MainLayout from './layouts/MainLayot/MainLayout'
 import HomePage from './pages/HomePage/HomePage'
 
 const ProfilePage = React.lazy(
-	() => import(/* webpackChunkName: "ProfilePage" */ './pages/ProfilePage/ProfilePage')
+	() =>
+		import(
+			/* webpackChunkName: "ProfilePage" */ './pages/ProfilePage/ProfilePage'
+		)
+)
+
+const ProfileEditPage = React.lazy(
+	() =>
+		import(
+			/* webpackChunkName: "ProfileEditPage" */ './pages/ProfileEditPage/ProfileEditPage'
+		)
 )
 
 function App() {
@@ -17,6 +27,14 @@ function App() {
 					element={
 						<Suspense fallback={null}>
 							<ProfilePage />
+						</Suspense>
+					}
+				/>
+				<Route
+					path='profile/edit'
+					element={
+						<Suspense fallback={null}>
+							<ProfileEditPage />
 						</Suspense>
 					}
 				/>

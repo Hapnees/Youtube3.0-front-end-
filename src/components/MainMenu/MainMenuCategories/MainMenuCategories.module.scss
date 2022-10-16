@@ -3,6 +3,6 @@
 
 	&:after {
 		content: '';
-		@apply block bg-[#1e1e1e] h-[2px] mt-1;
+		@apply block bg-[#1e1e1e] h-[2px] w-[90%] mt-1;
 	}
 }

@@ -16,6 +16,10 @@ import {
 	mainMenuCategoriesReducer,
 	mainMenuCategoriesSlice,
 } from './slices/mainMenuCategories.slice'
+import { userApi } from '../api/user.api'
+import { mediaApi } from '../api/media.api'
+import { modalWindowReducer } from './slices/modalWindow.slice'
+import { videoApi } from '../api/video.api'
 
 const persistConfig = {
 	key: 'root',
@@ -26,8 +30,12 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	[authApi.reducerPath]: authApi.reducer,
+	[userApi.reducerPath]: userApi.reducer,
+	[mediaApi.reducerPath]: mediaApi.reducer,
+	[videoApi.reducerPath]: videoApi.reducer,
 	auth: authSlice.reducer,
 	mainMenuCategories: mainMenuCategoriesReducer,
+	modalWindow: modalWindowReducer,
 })
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -47,7 +55,13 @@ const store = configureStore({
 					authSlice.actions.removeUser.toString(),
 				],
 			},
-		}).concat([authApi.middleware, ErrorHandler]),
+		}).concat([
+			authApi.middleware,
+			userApi.middleware,
+			mediaApi.middleware,
+			videoApi.middleware,
+			ErrorHandler,
+		]),
 })
 
 export default store

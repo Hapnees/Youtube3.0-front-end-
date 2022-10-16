@@ -1,0 +1,13 @@
+.container {
+	@apply bg-[#0d0d0d] rounded-md;
+	width: 800px;
+	height: 350px;
+}
+
+.title {
+	@apply tracking-wide text-3xl;
+}
+
+.button {
+	@apply self-start bg-white cursor-pointer text-black font-semibold px-2 py-1 rounded-lg;
+}

@@ -3,6 +3,19 @@
 }
 
 .info {
-	@apply bg-[#181818];
-	height: 210px;
+	@apply bg-[#151515];
+	height: 165px;
+}
+
+.menu {
+	@apply flex gap-1;
+
+	> li {
+		@apply text-zinc-500 py-2 px-6 cursor-pointer uppercase rounded-md
+		hover:text-zinc-300 hover:bg-zinc-800 duration-300;
+
+		&:first-child {
+			@apply text-zinc-300 bg-zinc-800;
+		}
+	}
 }
