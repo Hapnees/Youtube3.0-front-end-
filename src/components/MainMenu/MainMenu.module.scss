@@ -1,8 +1,9 @@
 @import '../../styles/variables.scss';
 
 .container {
-	@apply py-6 font-semibold;
+	@apply sticky top-[63px] py-6 font-semibold;
 	margin-left: $main__spaceX;
+	height: 100%;
 }
 
 .menu_subscribers {

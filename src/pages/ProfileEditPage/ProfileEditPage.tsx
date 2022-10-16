@@ -154,7 +154,7 @@ const ProfileEditPage = () => {
 	}
 
 	return (
-		<div className='grow mt-6'>
+		<div className='grow'>
 			<div>
 				<img
 					src={headerUrl || profileData?.headerPath}

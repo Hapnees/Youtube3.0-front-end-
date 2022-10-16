@@ -26,7 +26,13 @@ const ProfilePage = () => {
 	return (
 		<div className='flex flex-col gap-4 grow'>
 			<div>
-				<div className={cl.header}></div>
+				<div className={cl.header}>
+					<img
+						src={profileData?.headerPath}
+						alt=''
+						className='h-full w-full object-cover'
+					/>
+				</div>
 				<div className={cl.info}>
 					<div className='flex flex-col h-full mx-20'>
 						<div className='flex items-center justify-between grow'>

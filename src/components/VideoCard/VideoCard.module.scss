@@ -1,7 +1,7 @@
 @import '../../styles/variables.scss';
 
 .container {
-	@apply flex flex-col gap-2 rounded-md bg-[#171717] pb-2 cursor-pointer;
+	@apply flex flex-col gap-2 rounded-md bg-[#171717] pb-2 cursor-pointer self-start;
 	box-shadow: 0 0 5px black;
 	width: $card__width;
 }
