@@ -64,6 +64,7 @@ const EditVideoWindow: FC<IAddVideoDetailsProps> = ({ video }) => {
 	useEffect(() => {
 		setValue('title', video.title)
 		setValue('isPrivate', video.isPrivate)
+		setValue('description', video.description)
 	}, [])
 
 	const onSubmit: SubmitHandler<IVideoUpdate> = async dataSubmit => {

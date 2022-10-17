@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { ILoginGet } from '../models/login/login-get.interface'
 import { IUserGet } from '../models/user/user-get.interface'
 import { IUserUpdate } from '../models/user/user-update.interface'
 import { IVideoAdd } from '../models/video/video-add.interface'

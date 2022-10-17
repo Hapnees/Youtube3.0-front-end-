@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import cl from './VideoPage.module.scss'
 import { IoHeartSharp } from 'react-icons/io5'
@@ -10,12 +10,32 @@ import { dateFormat } from '../../utils/date.format'
 import { numberFormat } from '../../utils/number.format'
 import Loader from '../../components/ui/LoaderUI/Loader'
 import { useGetVideoByIdQuery } from '../../api/user.api'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { useAutosizeTextArea } from '../../hooks/useAutosizeTextarea'
+import { AiOutlineLike } from 'react-icons/ai'
+import { AiOutlineDislike } from 'react-icons/ai'
 
 const VideoPage = () => {
+	const [textValue, setTextValue] = useState('')
+	const textRef = useRef<HTMLTextAreaElement>(null)
+	const {
+		user: { username, avatarPath, token },
+	} = useTypedSelector(state => state.auth)
 	const params: any = useParams()
+	const [isExpanded, setIsExpanded] = useState(false)
+	const [isClickedComment, setIsClickedComment] = useState(false)
 	const { data: videoData, isLoading: isVideoLoading } = useGetVideoByIdQuery(
 		params.id
 	)
+
+	useAutosizeTextArea(textRef.current, textValue)
+
+	const handleChangeTextarea = (
+		event: React.ChangeEvent<HTMLTextAreaElement>
+	) => {
+		const val = event.target.value
+		setTextValue(val)
+	}
 
 	return (
 		<>
@@ -28,7 +48,7 @@ const VideoPage = () => {
 						<p className={cl.video__title}>{videoData?.title}</p>
 
 						{/* video info */}
-						<div>
+						<div className={cl.video__info}>
 							<div className={cl.top__info}>
 								<div className='flex justify-between'>
 									<div className='flex items-center gap-2 text-zinc-400'>
@@ -95,8 +115,114 @@ const VideoPage = () => {
 								</div>
 
 								<div className='ml-16'>
-									<p>{videoData?.description}</p>
+									<p
+										className={!isExpanded ? cl.description : 'mb-2 w-[900px]'}
+									>
+										{videoData?.description}
+									</p>
+									<p
+										className='text-zinc-400 cursor-pointer'
+										onClick={() => setIsExpanded(!isExpanded)}
+									>
+										{!isExpanded ? 'Развернуть' : 'Свернуть'}
+									</p>
 								</div>
+							</div>
+						</div>
+
+						<div className='flex flex-col gap-4'>
+							<p>83 комментария</p>
+
+							<div className='flex flex-col gap-6'>
+								<div>
+									<div
+										className={
+											!isClickedComment
+												? 'flex items-center gap-4 pb-2'
+												: 'flex flex-col gap-4 pb-2'
+										}
+									>
+										<div className='flex items-center gap-2'>
+											{avatarPath ? (
+												<img
+													src={avatarPath}
+													alt=''
+													width={45}
+													className='rounded-full'
+												/>
+											) : (
+												<FaUserAlt
+													className='border-2 rounded-full p-1'
+													size={45}
+												/>
+											)}
+
+											{isClickedComment && (
+												<p className='text-lg'>{username}</p>
+											)}
+										</div>
+										<textarea
+											className={cl.textarea}
+											placeholder={`${username}, вы можете оставить комментарий`}
+											onClick={() => setIsClickedComment(true)}
+											onChange={event => handleChangeTextarea(event)}
+											rows={1}
+											ref={textRef}
+										></textarea>
+									</div>
+									{isClickedComment && (
+										<div className='flex gap-2 justify-end'>
+											<button
+												className={
+													textValue.length
+														? `${cl.button__send} ${cl.button__send__active}`
+														: `${cl.button__send} ${cl.button__send__nonactive}`
+												}
+											>
+												Оставить комментарий
+											</button>
+											<button
+												className='px-4 py-2 border border-zinc-500 text-zinc-300 rounded-md uppercase'
+												onClick={() => setIsClickedComment(false)}
+											>
+												Отмена
+											</button>
+										</div>
+									)}
+								</div>
+								<ul className={cl.comments}>
+									<li>
+										<FaUserAlt
+											className='border-2 rounded-full p-1'
+											size={45}
+										/>
+
+										<div>
+											<div className='flex items-center gap-2'>
+												<p>Thomas Anderson</p>
+												<p className='text-zinc-400 text-sm'>год назад</p>
+											</div>
+
+											<div>
+												<p className='mb-2'>
+													спасибо за классную игру. идеальный состав участников.
+													главное все были увлечены игрой, поэтому и выпуск был
+													бомбовый. прям кайф было смотреть.
+												</p>
+												<div className='flex gap-3'>
+													<div className={cl.like_dislike}>
+														<AiOutlineLike />
+														<p className={cl.like_dislike__count}>320</p>
+													</div>
+													<div className={cl.like_dislike}>
+														<AiOutlineDislike />
+														<p className={cl.like_dislike__count}>11</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>

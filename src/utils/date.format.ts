@@ -6,7 +6,7 @@ export const dateFormat = (date: string) => {
 
 	const wordMonth = detMonth(parseInt(month))
 
-	return `${day} ${wordMonth} ${year}г`
+	return `${day} ${wordMonth} ${year} г`
 }
 
 const detMonth = (month: number) => {
