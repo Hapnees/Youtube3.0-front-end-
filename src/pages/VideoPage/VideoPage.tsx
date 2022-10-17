@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useGetVideoByIdQuery } from '../../api/video.api'
 import cl from './VideoPage.module.scss'
 import { IoHeartSharp } from 'react-icons/io5'
 import { IoHeartDislikeSharp } from 'react-icons/io5'
@@ -10,7 +9,7 @@ import SubscribeButton from '../../components/ui/ProfileUI/SubscribeButton/Subsc
 import { dateFormat } from '../../utils/date.format'
 import { numberFormat } from '../../utils/number.format'
 import Loader from '../../components/ui/LoaderUI/Loader'
-import { useLazyGetProfileByIdQuery } from '../../api/user.api'
+import { useGetVideoByIdQuery } from '../../api/user.api'
 
 const VideoPage = () => {
 	const params: any = useParams()

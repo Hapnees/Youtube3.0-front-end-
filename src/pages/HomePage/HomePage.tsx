@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGetVideosQuery } from '../../api/video.api'
+import { useGetVideosQuery } from '../../api/user.api'
 import VideoGrid from '../../components/ui/VideoGridUI/VideoGrid'
 
 const HomePage = () => {

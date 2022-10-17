@@ -2,42 +2,32 @@ import React, { FC, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { toastConfig } from '../../config/toast.config'
-import { durationFormat } from '../../utils/duration.format'
-import { getFilename } from '../../utils/getFilename.util'
 import { imgValidator } from '../../validator/img.validator'
 import AuthInput from '../ui/AuthFormUI/AuthInput/AuthInput'
 import SubscribeButton from '../ui/ProfileUI/SubscribeButton/SubscribeButton'
-import cl from './AddVideoDetails.module.scss'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
-import axios from 'axios'
 import { useUploadImageMutation } from '../../api/media.api'
-import { BsCheckLg } from 'react-icons/bs'
-import { IVideoAdd } from '../../models/video/video-add.interface'
+import cl from './EditVideoWindow.module.scss'
+import { IVideoGet } from '../../models/video/video-get.interface'
+import { IVideoUpdate } from '../../models/video/video-uptadte.interface'
+import { useUpdateVideoMutation } from '../../api/user.api'
 import { useActions } from '../../hooks/useActions'
-import { useAddVideoMutation, useGetProfileQuery } from '../../api/user.api'
 
 interface IAddVideoDetailsProps {
-	videoFile: any
+	video: IVideoGet
 }
 
-const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
-	const [isComplete, setIsComplete] = useState(false)
+const EditVideoWindow: FC<IAddVideoDetailsProps> = ({ video }) => {
 	const { setIsOpenModalWindow } = useActions()
-	const [progress, setProgress] = useState<number>(0)
-
 	const {
 		user: { id: userId, token },
 	} = useTypedSelector(state => state.auth)
-	const { register, setValue, handleSubmit } = useForm<IVideoAdd>({
+	const { register, setValue, handleSubmit } = useForm<IVideoUpdate>({
 		mode: 'onChange',
 	})
 
-	const { data: getProfileUser } = useGetProfileQuery(token || '')
-
-	const [addVideo] = useAddVideoMutation()
+	const [updateVideo] = useUpdateVideoMutation()
 	const [uploadImage] = useUploadImageMutation()
-
-	const [videoDuration, setVideoDuration] = useState<string>()
 
 	const [thumbnailImg, setThumbnailImg] = useState()
 	const [thumbnailUrl, setThumbnailUrl] = useState<string>()
@@ -72,86 +62,38 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 
 	// Заносим имя загруженного видео в title + определяем длительность видео
 	useEffect(() => {
-		setValue('title', getFilename(videoFile.name))
-
-		const video = document.createElement('video')
-		video.preload = 'metadata'
-
-		video.onloadedmetadata = () => {
-			URL.revokeObjectURL(video.src)
-			const duration = video.duration
-
-			setVideoDuration(durationFormat(duration))
-		}
-
-		video.src = URL.createObjectURL(videoFile)
+		setValue('title', video.title)
+		setValue('isPrivate', video.isPrivate)
 	}, [])
 
-	const onSubmit: SubmitHandler<IVideoAdd> = async dataSubmit => {
-		if (!getProfileUser) {
-			toast.error('Ошибка пользователя', toastConfig)
-			return
-		}
+	const onSubmit: SubmitHandler<IVideoUpdate> = async dataSubmit => {
+		dataSubmit.id = video.id
 
-		dataSubmit.user = getProfileUser
-
-		if (!videoDuration) {
-			toast.error('Ошибка длительности', toastConfig)
-		}
-
-		dataSubmit.duration = videoDuration || ''
-
-		if (!thumbnailImg) {
-			toast.error('Загрузите превью', toastConfig)
-			console.error('Загрузите превью')
-			return
-		}
-
-		const videoData = new FormData()
-		videoData.append('video', videoFile)
-		try {
-			const videoUploadData: any = await axios.post(
-				'http://localhost:4000/api/media/upload/video',
-				videoData,
-				{
-					headers: { Authorization: `Bearer ${token}` },
-					onUploadProgress: event => {
-						if (event.total)
-							setProgress(Math.round((event.loaded * 100) / event.total))
-					},
-				}
-			)
-
-			dataSubmit.videoPath = videoUploadData.data.url
-			dataSubmit.vid = videoUploadData.data.vid
-
+		if (thumbnailImg) {
 			const imgData = new FormData()
 			imgData.append('image', thumbnailImg)
 			const imgUploadData: any = await uploadImage({
 				file: imgData,
 				userId: userId || 0,
 				token: token || '',
-				folder: `videos/vid_${videoUploadData.data.vid}/thumbnail`,
+				folder: `videos/vid_${video.vid}/thumbnail`,
 			})
 
 			dataSubmit.thumbnailPath = imgUploadData.data.url
-
-			const addVideoData: any = await addVideo({
-				file: dataSubmit,
-				token: token || '',
-			})
-			setIsComplete(true)
-			toast.success(addVideoData.data.message, toastConfig)
-			setTimeout(() => {
-				setIsOpenModalWindow({ isOpen: false })
-			}, 3000)
-		} catch (e) {
-			toast.error(e, toastConfig)
 		}
+		console.log(dataSubmit)
+		updateVideo({ file: dataSubmit, token: token || '' })
+			.unwrap()
+			.then(data => {
+				toast.success(data.message, toastConfig)
+				setTimeout(() => {
+					setIsOpenModalWindow({ isOpen: false })
+				}, 3000)
+			})
 	}
 
 	return (
-		<form className='px-4' onSubmit={handleSubmit(onSubmit)}>
+		<form className={cl.form} onSubmit={handleSubmit(onSubmit)}>
 			<p className='text-2xl text-center tracking-wide py-4'>Детали видео</p>
 			<div className='grid grid-cols-2 gap-8'>
 				<div className='flex flex-col gap-2'>
@@ -178,20 +120,20 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 						onChange={event => handleChangeThumbnail(event)}
 					/>
 					<label className={cl.thumbnail} htmlFor='thumbnail'>
-						{!thumbnailUrl ? (
+						{!thumbnailUrl && !video.thumbnailPath ? (
 							<div className='h-full flex items-center justify-center border border-zinc-500'>
 								<p className='text-zinc-400 text-xl'>Загрузить превью</p>
 							</div>
 						) : (
 							<>
 								<img
-									src={thumbnailUrl}
+									src={thumbnailUrl || video.thumbnailPath}
 									alt='thumbnailImg'
 									className='object-cover w-full h-full rounded-md'
 								/>
 							</>
 						)}
-						<div className={cl.duration}>{videoDuration}</div>
+						<div className={cl.duration}>{video.duration}</div>
 					</label>
 					<div className={cl.checkbox}>
 						<input
@@ -207,35 +149,11 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 				</div>
 			</div>
 
-			<div className='flex items-center justify-between'>
-				<div className='flex items-center gap-4 mt-3'>
-					{progress > 0 && (
-						<>
-							<div className='flex items-center gap-1'>
-								<p className='text-green-400'>Загрузка</p>
-								<p className='text-green-400 font-semibold'>{progress}%</p>
-							</div>
-							<BsCheckLg className='bg-green-600 p-1 rounded-full' size={27} />
-						</>
-					)}
-					{progress === 100 && (
-						<div className='flex gap-2'>
-							<p className='text-green-400'>Добавление видео</p>
-							{!isComplete ? (
-								<div className={cl.circle}></div>
-							) : (
-								<BsCheckLg
-									className='bg-green-600 p-1 rounded-full'
-									size={27}
-								/>
-							)}
-						</div>
-					)}
-				</div>
-				<SubscribeButton>Добавить</SubscribeButton>
+			<div className='flex items-center justify-end'>
+				<SubscribeButton>Сохранить</SubscribeButton>
 			</div>
 		</form>
 	)
 }
 
-export default AddVideoDetails
+export default EditVideoWindow

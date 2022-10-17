@@ -10,7 +10,7 @@ interface IModalWindow {
 const ModalWindow: FC<IModalWindow> = ({ children }) => {
 	const { setIsOpenModalWindow } = useActions()
 	const handleClickClose = () => {
-		setIsOpenModalWindow(false)
+		setIsOpenModalWindow({ isOpen: false })
 	}
 
 	return (

@@ -2,6 +2,11 @@
 $checkbox__size: 20px;
 $mark__size: 12px;
 
+.form {
+	@apply px-4 bg-[#131313] pb-2;
+	z-index: 1001;
+}
+
 .input {
 	width: 100%;
 }

@@ -24,7 +24,7 @@ const PopupMenu: FC<IPopupMenu> = ({ setIsOpen }) => {
 	}
 
 	const handleClickAddVideo = () => {
-		setIsOpenModalWindow(true)
+		setIsOpenModalWindow({ isOpen: true, type: 'add' })
 		setIsOpen(false)
 	}
 
