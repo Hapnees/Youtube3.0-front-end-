@@ -1,26 +1,44 @@
 import React, { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useGetVideosQuery, useLazySearchVideosQuery } from '../../api/user.api'
+import {
+	useLazyGetVideosQuery,
+	useLazySearchVideosQuery,
+} from '../../api/user.api'
 import Loader from '../../components/ui/LoaderUI/Loader'
 import VideoGrid from '../../components/ui/VideoGridUI/VideoGrid'
+import { useActions } from '../../hooks/useActions'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
 
 const HomePage = () => {
+	const { search } = useTypedSelector(state => state.input)
+	const { setSearch } = useActions()
 	const isMounted = useRef(false)
-	const [searchParams] = useSearchParams()
-	const { data: videoData, isLoading: isLoadingVideoData } = useGetVideosQuery()
+	const [searchParams, setSearchParams] = useSearchParams()
+	const [getVideos, { data: videoData, isLoading: isLoadingVideoData }] =
+		useLazyGetVideosQuery()
 	const [
 		searchVideos,
 		{ data: searchedVideos, isLoading: isLoadingSearchedVideos },
 	] = useLazySearchVideosQuery()
 
 	useEffect(() => {
-		const value = searchParams.get('search')
-		console.log('value -> ', value)
-		console.log('isMounted -> ', isMounted)
-		if (isMounted.current || value) searchVideos(value || '')
-		isMounted.current = true
-	}, [searchParams.get('search')])
+		const _value = searchParams.get('search')
+		if (_value) {
+			setSearch(_value)
+		} else {
+			getVideos()
+		}
+	}, [])
+
+	useEffect(() => {
+		if (search) {
+			setSearchParams({ search })
+			searchVideos(search)
+		} else {
+			if (isMounted.current) getVideos()
+			isMounted.current = true
+		}
+	}, [search])
 
 	return (
 		<div className='mt-4'>

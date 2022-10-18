@@ -4,32 +4,32 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useLazySearchVideosQuery } from '../../../../api/user.api'
 import { useActions } from '../../../../hooks/useActions'
+import { useTypedSelector } from '../../../../hooks/useTypedSelector'
 
 const HedaerInput: FC<React.HTMLProps<HTMLInputElement>> = props => {
-	const navigate = useNavigate()
-	const [searchParams, setSearchParams] = useSearchParams()
 	const [value, setValue] = useState('')
+	const navigate = useNavigate()
+	const { setSearch } = useActions()
+	const [searchParams] = useSearchParams()
 
 	// Заносим параметры в input
 	useEffect(() => {
 		const _value = searchParams.get('search')
 		if (_value) {
 			setValue(_value)
-		} else setSearchParams()
+		}
 	}, [])
 
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === 'Enter') {
-			if (value) {
-				setSearchParams({ search: value })
-			} else setSearchParams()
+			setSearch(value)
+			navigate('/')
 		}
 	}
 
 	const handleClickSearch = () => {
-		if (value) {
-			setSearchParams({ search: value })
-		} else setSearchParams()
+		setSearch(value)
+		navigate('/')
 	}
 
 	return (

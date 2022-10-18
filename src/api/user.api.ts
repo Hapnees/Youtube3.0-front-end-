@@ -195,7 +195,7 @@ export const {
 	useGetProfileByIdQuery,
 	useAddVideoMutation,
 	useGetVideoByIdQuery,
-	useGetVideosQuery,
+	useLazyGetVideosQuery,
 	useUpdateVideoMutation,
 	useDeleteVideoMutation,
 	useLazySearchVideosQuery,

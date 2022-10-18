@@ -19,6 +19,7 @@ import {
 import { userApi } from '../api/user.api'
 import { mediaApi } from '../api/media.api'
 import { modalWindowReducer } from './slices/modalWindow.slice'
+import { inputSlice } from './slices/input.slice'
 
 const persistConfig = {
 	key: 'root',
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
 	[authApi.reducerPath]: authApi.reducer,
 	[userApi.reducerPath]: userApi.reducer,
 	[mediaApi.reducerPath]: mediaApi.reducer,
+	input: inputSlice.reducer,
 	auth: authSlice.reducer,
 	mainMenuCategories: mainMenuCategoriesReducer,
 	modalWindow: modalWindowReducer,
