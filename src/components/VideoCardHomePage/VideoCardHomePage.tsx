@@ -27,8 +27,7 @@ const VideoCardHomePage: FC<IVideoCard> = ({ video }) => {
 					<img
 						src={video.user.avatar_path || testAvatar}
 						alt=''
-						width={55}
-						className='rounded-full p-1 border border-zinc-400 h-full'
+						className='rounded-full p-1 border h-[55px] w-[55px] border-zinc-400 '
 					/>
 					<div className='overflow-hidden mt-1'>
 						<div>

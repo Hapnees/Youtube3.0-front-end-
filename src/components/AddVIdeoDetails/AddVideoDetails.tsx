@@ -142,9 +142,7 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
 			})
 			setIsComplete(true)
 			toast.success(addVideoData.data.message, toastConfig)
-			setTimeout(() => {
-				setIsOpenModalWindow({ isOpen: false })
-			}, 3000)
+			setIsOpenModalWindow({ isOpen: false })
 		} catch (e) {
 			toast.error(e, toastConfig)
 		}

@@ -20,8 +20,7 @@ const HeaderMenu = () => {
 					<img
 						src={avatarPath}
 						alt=''
-						width={50}
-						className='border-2 p-1 border-dashed border-transparent object-cover rounded-full hover:border-blue-400 hover:scale-110 duration-300 cursor-pointer'
+						className='border-2 p-1 border-dashed border-transparent object-cover rounded-full hover:border-blue-400 hover:scale-110 duration-300 cursor-pointer w-[50px] h-[50px]'
 					/>
 				</Link>
 			) : (

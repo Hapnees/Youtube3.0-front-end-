@@ -34,7 +34,7 @@ const ProfilePage = () => {
 							<img
 								src={profileData?.headerPath}
 								alt=''
-								className='h-full w-full object-cover'
+								className='h-full w-full object-cover border border-transparent'
 							/>
 						</div>
 						<div className={cl.info}>
@@ -44,8 +44,7 @@ const ProfilePage = () => {
 										<img
 											src={profileData?.avatarPath || profileIcon}
 											alt='profileIcon'
-											width={70}
-											className='rounded-full'
+											className='rounded-full w-[70px] h-[70px]'
 										/>
 										<div>
 											<p className='text-2xl'>

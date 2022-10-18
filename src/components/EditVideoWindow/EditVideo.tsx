@@ -87,9 +87,7 @@ const EditVideoWindow: FC<IAddVideoDetailsProps> = ({ video }) => {
 			.unwrap()
 			.then(data => {
 				toast.success(data.message, toastConfig)
-				setTimeout(() => {
-					setIsOpenModalWindow({ isOpen: false })
-				}, 3000)
+				setIsOpenModalWindow({ isOpen: false })
 			})
 	}
 

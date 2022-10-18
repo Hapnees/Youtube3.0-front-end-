@@ -76,3 +76,20 @@ body {
 	opacity: 0;
 	transition: opacity 300ms;
 }
+
+// VOLUME ANIMATION
+
+.volume-enter {
+	width: 16px;
+}
+.volume-enter-active {
+	width: 70px;
+	transition: width 0.3s;
+}
+.volume-exit {
+	width: 70px;
+}
+.volume-exit-active {
+	width: 16px;
+	transition: width 0.3s;
+}

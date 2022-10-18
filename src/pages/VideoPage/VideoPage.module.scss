@@ -1,9 +1,3 @@
-.player {
-	@apply border;
-	width: 1150px;
-	height: 600px;
-}
-
 .video__info {
 	&:after {
 		@apply bg-zinc-800 my-2;
@@ -48,12 +42,17 @@
 }
 
 .description {
-	margin-bottom: 10px;
-	width: 900px;
+	width: 100%;
+	max-width: 900px;
 	display: -webkit-box;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
+}
+
+.description__full {
+	@apply w-[900px];
+	max-height: 100%;
 }
 
 .input {
@@ -89,4 +88,13 @@
 
 .like_dislike__count {
 	@apply text-zinc-400 text-sm;
+}
+
+@keyframes volume {
+	from {
+		max-width: 30px;
+	}
+	to {
+		max-width: 100px;
+	}
 }

@@ -11,12 +11,11 @@ import { MdModeEdit } from 'react-icons/md'
 import { BsFillTrashFill } from 'react-icons/bs'
 import { CSSTransition } from 'react-transition-group'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
-import ModalWindow from '../ui/ModalUI/ModalWindow'
-import EditVideoWindow from '../EditVideoWindow/EditVideo'
 import { useActions } from '../../hooks/useActions'
 import { useDeleteVideoMutation } from '../../api/user.api'
 import { toast } from 'react-toastify'
 import { toastConfig } from '../../config/toast.config'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface IVideoCard {
 	video: IVideoGet
@@ -24,6 +23,7 @@ interface IVideoCard {
 }
 
 const VideoCard: FC<IVideoCard> = ({ video, user }) => {
+	const navigate = useNavigate()
 	const {
 		user: { token },
 	} = useTypedSelector(state => state.auth)
@@ -32,18 +32,20 @@ const VideoCard: FC<IVideoCard> = ({ video, user }) => {
 
 	const [deletVideo] = useDeleteVideoMutation()
 
-	const handleClickEdit = () => {
+	const handleClickEdit = (event: any) => {
+		event.preventDefault()
 		setIsOpenModalWindow({ isOpen: true, type: 'edit', data: video })
 	}
 
-	const handleClickDelete = async () => {
+	const handleClickDelete = async (event: any) => {
+		event.preventDefault()
 		deletVideo({ id: video.id, token: token || '' })
 			.unwrap()
 			.then(data => toast.success(data.message, toastConfig))
 	}
 
 	return (
-		<>
+		<Link to={`/video/${video.id}`} replace={true}>
 			<div className={cl.container}>
 				<div className={cl.thumbnail__container}>
 					<div
@@ -66,12 +68,12 @@ const VideoCard: FC<IVideoCard> = ({ video, user }) => {
 								<MdModeEdit
 									size={50}
 									className={cl.edit}
-									onClick={handleClickEdit}
+									onClick={event => handleClickEdit(event)}
 								/>
 								<BsFillTrashFill
 									size={50}
 									className={cl.delete}
-									onClick={handleClickDelete}
+									onClick={event => handleClickDelete(event)}
 								/>
 							</div>
 						</CSSTransition>
@@ -87,8 +89,7 @@ const VideoCard: FC<IVideoCard> = ({ video, user }) => {
 					<img
 						src={(!!user && user.avatarPath) || testAvatar}
 						alt=''
-						width={55}
-						className='rounded-full p-1 border border-zinc-400 h-full'
+						className='rounded-full p-1 w-[55px] h-[55px] border border-zinc-400'
 					/>
 					<div className='overflow-hidden mt-1'>
 						<div>
@@ -110,7 +111,7 @@ const VideoCard: FC<IVideoCard> = ({ video, user }) => {
 					</div>
 				</div>
 			</div>
-		</>
+		</Link>
 	)
 }
 

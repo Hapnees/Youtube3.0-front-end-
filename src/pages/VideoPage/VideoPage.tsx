@@ -19,6 +19,9 @@ import { useAutosizeTextArea } from '../../hooks/useAutosizeTextarea'
 import { AiOutlineLike } from 'react-icons/ai'
 import { AiOutlineDislike } from 'react-icons/ai'
 import { dateAgoFormat } from '../../utils/dateAgo.format'
+import VideoPlayer from '../../components/VideoPlayer/VideoPlayer'
+import { toast } from 'react-toastify'
+import { toastConfig } from '../../config/toast.config'
 
 const VideoPage = () => {
 	const [addComment] = useAddCommentMutation()
@@ -38,6 +41,14 @@ const VideoPage = () => {
 
 	useAutosizeTextArea(textRef.current, textValue)
 
+	const handleClickTextArea = () => {
+		if (!user.token) {
+			toast.info('Войдите, чтобы оставить комментарий', toastConfig)
+			return
+		}
+		setIsClickedComment(false)
+	}
+
 	const handleChangeTextarea = (
 		event: React.ChangeEvent<HTMLTextAreaElement>
 	) => {
@@ -46,7 +57,7 @@ const VideoPage = () => {
 	}
 
 	const handleClickAddComment = () => {
-		if (textRef.current && videoData)
+		if (textRef.current && videoData) {
 			addComment({
 				comment: {
 					title: textRef.current.value,
@@ -55,6 +66,10 @@ const VideoPage = () => {
 				},
 				token: user.token || '',
 			})
+
+			textRef.current.value = ''
+			setIsClickedComment(false)
+		}
 	}
 
 	return (
@@ -63,7 +78,7 @@ const VideoPage = () => {
 				<Loader />
 			) : (
 				<div className='flex flex-col gap-4 mt-8 mx-8'>
-					<div className={cl.player}></div>
+					<VideoPlayer />
 					<div className='w-[1150px] flex flex-col gap-2'>
 						<p className={cl.video__title}>{videoData?.title}</p>
 
@@ -113,8 +128,7 @@ const VideoPage = () => {
 											<img
 												src={videoData.user.avatar_path}
 												alt=''
-												width={55}
-												className='rounded-full object-cover'
+												className='rounded-full w-[55px] h-[55px] object-cover'
 											/>
 										) : (
 											<FaUserAlt
@@ -136,7 +150,9 @@ const VideoPage = () => {
 
 								<div className='ml-16'>
 									<p
-										className={!isExpanded ? cl.description : 'mb-2 w-[900px]'}
+										className={
+											!isExpanded ? cl.description : cl.description__full
+										}
 									>
 										{videoData?.description}
 									</p>
@@ -167,8 +183,7 @@ const VideoPage = () => {
 												<img
 													src={user.avatarPath}
 													alt=''
-													width={45}
-													className='rounded-full'
+													className='rounded-full w-[45px] h-[45px]'
 												/>
 											) : (
 												<FaUserAlt
@@ -184,11 +199,16 @@ const VideoPage = () => {
 										<div className='w-full'>
 											<textarea
 												className={cl.textarea}
-												placeholder={`${user.username}, вы можете оставить комментарий`}
-												onClick={() => setIsClickedComment(true)}
+												placeholder={
+													user.token
+														? `${user.username}, вы можете оставить комментарий`
+														: 'Войдите, чтобы оставить комментарий'
+												}
+												onClick={handleClickTextArea}
 												onChange={event => handleChangeTextarea(event)}
 												rows={1}
 												ref={textRef}
+												readOnly={user.token ? false : true}
 											></textarea>
 											<div className='h-[2px] bg-zinc-600 w-full mt-1'></div>
 										</div>
@@ -226,8 +246,7 @@ const VideoPage = () => {
 														<img
 															src={comment.user.avatar_path}
 															alt=''
-															width={45}
-															className='rounded-full h-full'
+															className='rounded-full w-[45px] h-[45px]'
 														/>
 													) : (
 														<FaUserAlt
