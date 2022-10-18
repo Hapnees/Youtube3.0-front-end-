@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { ICommentGet } from '../models/comment/comment-get.interface'
+import { ICommentSend } from '../models/comment/comment-send.interface'
 import { IUserGet } from '../models/user/user-get.interface'
 import { IUserUpdate } from '../models/user/user-update.interface'
 import { IVideoAdd } from '../models/video/video-add.interface'
@@ -8,7 +10,7 @@ import { IVideoUpdate } from '../models/video/video-uptadte.interface'
 
 export const userApi = createApi({
 	reducerPath: 'userApi',
-	tagTypes: ['User', 'Video'],
+	tagTypes: ['User', 'Video', 'Comment'],
 	baseQuery: fetchBaseQuery({
 		baseUrl: 'http://localhost:4000/api/',
 	}),
@@ -98,6 +100,36 @@ export const userApi = createApi({
 		getVideos: build.query<IVideoGetHomePage[], void>({
 			query: () => 'video',
 		}),
+
+		searchVideos: build.query<IVideoGetHomePage[], string>({
+			query: search => ({
+				url: 'video/search',
+				params: { search },
+			}),
+		}),
+
+		addComment: build.mutation<
+			{ commentId: number },
+			{ comment: ICommentSend; token: string }
+		>({
+			query: ({ comment, token }) => ({
+				url: 'comment/add',
+				method: 'POST',
+				headers: { Authorization: `Bearer ${token}` },
+				body: comment,
+			}),
+			invalidatesTags: result => [
+				{ type: 'Comment', username: result?.commentId },
+			],
+		}),
+
+		getComments: build.query<ICommentGet[], number>({
+			query: videoId => ({
+				url: 'comment/get',
+				params: { videoId },
+			}),
+			providesTags: ['Comment'],
+		}),
 	}),
 })
 
@@ -112,4 +144,8 @@ export const {
 	useGetVideosQuery,
 	useUpdateVideoMutation,
 	useDeleteVideoMutation,
+	useLazySearchVideosQuery,
+	useSearchVideosQuery,
+	useAddCommentMutation,
+	useGetCommentsQuery,
 } = userApi

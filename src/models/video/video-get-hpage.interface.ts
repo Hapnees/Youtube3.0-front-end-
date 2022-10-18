@@ -11,6 +11,5 @@ export interface IVideoGetHomePage {
 	video_path: string
 	user_id: number
 	created_at: Date
-	username: string
-	avatar_path: string
+	user: { username: string; avatar_path: string }
 }

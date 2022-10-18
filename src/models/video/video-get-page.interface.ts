@@ -1,5 +1,3 @@
-import { IUserGet } from '../user/user-get.interface'
-
 export interface IVideoGetPage {
 	id: number
 	vid: number
@@ -9,8 +7,8 @@ export interface IVideoGetPage {
 	views: number
 	likes: number
 	dislikes: number
-	thumbnailPath: string
-	videoPath: string
-	createdAt: Date
-	user: IUserGet
+	thumbnail_path: string
+	video_path: string
+	created_at: Date
+	user: { username: string; avatar_path: string }
 }

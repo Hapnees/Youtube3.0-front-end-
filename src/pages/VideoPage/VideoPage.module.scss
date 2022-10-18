@@ -61,7 +61,7 @@
 }
 
 .textarea {
-	@apply bg-transparent text-white w-full border-b border-zinc-600 resize-none overflow-hidden;
+	@apply bg-transparent text-white w-full resize-none;
 }
 
 .button__send {
@@ -77,8 +77,9 @@
 }
 
 .comments {
+	@apply flex flex-col gap-8;
 	> li {
-		@apply flex gap-2;
+		@apply flex gap-3;
 	}
 }
 
