@@ -11,19 +11,27 @@ import { numberFormat } from '../../utils/number.format'
 import Loader from '../../components/ui/LoaderUI/Loader'
 import {
 	useAddCommentMutation,
+	useAddDislikeCommentMutation,
+	useAddDislikeVideoMutation,
+	useAddLikeCommentMutation,
+	useAddLikeVideoMutation,
 	useGetCommentsQuery,
 	useGetVideoByIdQuery,
 } from '../../api/user.api'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
 import { useAutosizeTextArea } from '../../hooks/useAutosizeTextarea'
-import { AiOutlineLike } from 'react-icons/ai'
-import { AiOutlineDislike } from 'react-icons/ai'
+import { AiFillLike } from 'react-icons/ai'
+import { AiFillDislike } from 'react-icons/ai'
 import { dateAgoFormat } from '../../utils/dateAgo.format'
 import VideoPlayer from '../../components/VideoPlayer/VideoPlayer'
 import { toast } from 'react-toastify'
 import { toastConfig } from '../../config/toast.config'
 
 const VideoPage = () => {
+	const [addDislikeComment] = useAddDislikeCommentMutation()
+	const [addLikeComment] = useAddLikeCommentMutation()
+	const [addLikeVideo] = useAddLikeVideoMutation()
+	const [addDislikeVideo] = useAddDislikeVideoMutation()
 	const [addComment] = useAddCommentMutation()
 	const [textValue, setTextValue] = useState('')
 	const textRef = useRef<HTMLTextAreaElement>(null)
@@ -46,7 +54,7 @@ const VideoPage = () => {
 			toast.info('Войдите, чтобы оставить комментарий', toastConfig)
 			return
 		}
-		setIsClickedComment(false)
+		setIsClickedComment(true)
 	}
 
 	const handleChangeTextarea = (
@@ -72,6 +80,31 @@ const VideoPage = () => {
 		}
 	}
 
+	const handleClickLikeVideo = () => {
+		if (videoData) addLikeVideo({ id: videoData.id, token: user.token || '' })
+	}
+
+	const handleClickDislikeVideo = () => {
+		if (videoData)
+			addDislikeVideo({ id: videoData.id, token: user.token || '' })
+	}
+
+	const handleClickLikeComment = (commentId: number) => {
+		if (videoData)
+			addLikeComment({
+				body: { userId: user.id || 0, commentId },
+				token: user.token || '',
+			})
+	}
+
+	const handleClickDislikeComment = (commentId: number) => {
+		if (videoData)
+			addDislikeComment({
+				body: { userId: user.id || 0, commentId },
+				token: user.token || '',
+			})
+	}
+
 	return (
 		<>
 			{isVideoLoading ? (
@@ -94,7 +127,14 @@ const VideoPage = () => {
 									</div>
 
 									<div className='flex gap-2'>
-										<div className={`${cl.button} ${cl.button__like}`}>
+										<div
+											className={
+												!videoData?.user.is_liked
+													? `${cl.button} ${cl.button__like}`
+													: `${cl.button} ${cl.button__like__active}`
+											}
+											onClick={handleClickLikeVideo}
+										>
 											<IoHeartSharp />
 											<p>Лайк</p>
 											<div className='flex gap-1'>
@@ -103,7 +143,14 @@ const VideoPage = () => {
 												</p>
 											</div>
 										</div>
-										<div className={`${cl.button} ${cl.button__dislike}`}>
+										<div
+											className={
+												!videoData?.user.is_disliked
+													? `${cl.button} ${cl.button__dislike}`
+													: `${cl.button} ${cl.button__dislike__active}`
+											}
+											onClick={handleClickDislikeVideo}
+										>
 											<IoHeartDislikeSharp />
 											<p>Дизлайк</p>
 											<div className='flex gap-1'>
@@ -266,20 +313,46 @@ const VideoPage = () => {
 														</div>
 
 														<div>
-															<p className='mb-2'>{comment.title}</p>
+															<p className='mb-1'>{comment.title}</p>
 															<div className='flex gap-3'>
-																<div className={cl.like_dislike}>
-																	<AiOutlineLike />
+																<div
+																	className={cl.like_dislike}
+																	onClick={() =>
+																		handleClickLikeComment(comment.id)
+																	}
+																>
+																	<AiFillLike
+																		color={
+																			comment.likes.ids.some(
+																				el => el === user.id
+																			)
+																				? 'red'
+																				: 'white'
+																		}
+																	/>
 																	<p className={cl.like_dislike__count}>
-																		{comment.likes > 0 &&
-																			numberFormat(comment.likes)}
+																		{comment.likes.count > 0 &&
+																			numberFormat(comment.likes.count)}
 																	</p>
 																</div>
-																<div className={cl.like_dislike}>
-																	<AiOutlineDislike />
+																<div
+																	className={cl.like_dislike}
+																	onClick={() =>
+																		handleClickDislikeComment(comment.id)
+																	}
+																>
+																	<AiFillDislike
+																		color={
+																			comment.dislikes.ids.some(
+																				el => el === user.id
+																			)
+																				? '#295fe5'
+																				: 'white'
+																		}
+																	/>
 																	<p className={cl.like_dislike__count}>
-																		{comment.dislikes > 0 &&
-																			numberFormat(comment.dislikes)}
+																		{comment.dislikes.count > 0 &&
+																			numberFormat(comment.dislikes.count)}
 																	</p>
 																</div>
 															</div>

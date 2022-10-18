@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FaPlay } from 'react-icons/fa'
 import { BsFillVolumeUpFill } from 'react-icons/bs'
+import { BsFillVolumeMuteFill } from 'react-icons/bs'
 import { CSSTransition } from 'react-transition-group'
 import { IoMdSettings } from 'react-icons/io'
 import { BiFullscreen } from 'react-icons/bi'
@@ -9,9 +10,12 @@ import { useGetVideoByIdQuery } from '../../api/user.api'
 import { useParams } from 'react-router-dom'
 import cl from './VideoPlayer.module.scss'
 import { timeFormat } from '../../utils/time.format'
+import { HiRewind } from 'react-icons/hi'
 
 const VideoPlayer = () => {
 	const params: any = useParams()
+	const [isClickedRightArrow, setIsClickedRightArrow] = useState(false)
+	const [isClickedLeftArrow, setIsClickedLeftArrow] = useState(false)
 	const [isPaused, setIsPaused] = useState(true)
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [volume, setVolume] = useState(100)
@@ -28,6 +32,14 @@ const VideoPlayer = () => {
 		return { backgroundSize: `${progress / 10}% 100%` }
 	}
 
+	const handleClickVolumeIcon = () => {
+		setVolume(0)
+	}
+
+	const handleClickMuteIcon = () => {
+		setVolume(100)
+	}
+
 	const handleTogglePlay = () => {
 		if (isPaused) {
 			videoRef?.current?.play()
@@ -38,19 +50,54 @@ const VideoPlayer = () => {
 		}
 	}
 
+	const handleKeyDown = (event: React.KeyboardEvent) => {
+		if (videoRef.current) {
+			if (event.key === 'ArrowRight') {
+				videoRef.current.currentTime += 10
+				setIsClickedRightArrow(true)
+				setTimeout(() => {
+					setIsClickedRightArrow(false)
+				}, 200)
+			} else if (event.key === 'ArrowLeft') {
+				videoRef.current.currentTime -= 10
+				setIsClickedLeftArrow(true)
+				setTimeout(() => {
+					setIsClickedLeftArrow(false)
+				}, 200)
+			} else if (event.key === ' ' || event.key === 'Enter') {
+				event.preventDefault()
+				if (isPaused) {
+					videoRef?.current?.play()
+					setIsPaused(false)
+				} else {
+					videoRef.current?.pause()
+					setIsPaused(true)
+				}
+			}
+		}
+	}
+
 	return (
 		<div className='relative w-full'>
+			{isClickedLeftArrow && <HiRewind className={cl.rewind} />}
+			{isClickedRightArrow && <HiRewind className={cl.rewind__rotate} />}
+			{!isPaused ? (
+				<FaPlay className={cl.play} />
+			) : (
+				<IoMdPause className={cl.play} />
+			)}
 			<video
+				onKeyDown={event => handleKeyDown(event)}
 				ref={videoRef}
 				src={videoData?.video_path}
 				className={cl.player}
-				width={1150}
 				onTimeUpdate={event =>
 					setProgress(
 						(Math.ceil(event.currentTarget.currentTime) * 1000) /
 							event.currentTarget.duration
 					)
 				}
+				onClick={handleTogglePlay}
 			></video>
 			<div className='absolute bottom-0 right-0 flex flex-col w-full'>
 				<div className='relative'>
@@ -88,10 +135,19 @@ const VideoPlayer = () => {
 									className={cl.volume__container}
 									onMouseEnter={() => setIsShowVolume(true)}
 								>
-									<BsFillVolumeUpFill
-										size={33}
-										className='cursor-pointer pr-3'
-									/>
+									{volume > 0 ? (
+										<BsFillVolumeUpFill
+											size={33}
+											className='cursor-pointer pr-3'
+											onClick={handleClickVolumeIcon}
+										/>
+									) : (
+										<BsFillVolumeMuteFill
+											size={33}
+											className='cursor-pointer pr-3'
+											onClick={handleClickMuteIcon}
+										/>
+									)}
 
 									<CSSTransition
 										in={isShowVolume}

@@ -93,3 +93,23 @@ body {
 	width: 16px;
 	transition: width 0.3s;
 }
+
+// PLAY ANIMATION
+
+.play-enter {
+	opacity: 0;
+	transform: scale(0.9);
+}
+.play-enter-active {
+	opacity: 1;
+	transform: translateX(0);
+	transition: opacity 300ms, transform 300ms;
+}
+.play-exit {
+	opacity: 1;
+}
+.play-exit-active {
+	opacity: 0;
+	transform: scale(0.9);
+	transition: opacity 300ms, transform 300ms;
+}

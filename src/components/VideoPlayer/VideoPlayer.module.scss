@@ -1,8 +1,42 @@
+$play__size: 100px;
+
+.rewind {
+	@apply absolute bottom-[50%] left-[15%] p-4 rounded-xl pointer-events-none;
+	height: $play__size;
+	width: $play__size;
+	background: rgba(0, 0, 0, 0.2);
+	opacity: 0;
+
+	animation: play 1s;
+}
+
+.rewind__rotate {
+	@apply absolute bottom-[50%] right-[15%] p-4 rounded-xl pointer-events-none rotate-180;
+	height: $play__size;
+	width: $play__size;
+	background: rgba(0, 0, 0, 0.2);
+	opacity: 0;
+
+	animation: play 1s;
+}
+
+.play {
+	@apply absolute bottom-[50%] left-[50%] p-4 rounded-xl pointer-events-none;
+	height: $play__size;
+	width: $play__size;
+	background: rgba(0, 0, 0, 0.2);
+	opacity: 0;
+
+	animation: play 1s;
+}
+
 .player {
 	@apply rounded-lg;
 	// opacity: 0;
 	z-index: 999;
 	box-shadow: 0 0 5px black;
+	width: 1150px;
+	max-height: 600px;
 }
 
 .progress__container {
@@ -101,4 +135,13 @@
 
 .volume__container {
 	@apply flex items-center mr-3;
+}
+
+@keyframes play {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
 }

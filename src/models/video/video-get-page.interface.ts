@@ -10,5 +10,10 @@ export interface IVideoGetPage {
 	thumbnail_path: string
 	video_path: string
 	created_at: Date
-	user: { username: string; avatar_path: string }
+	user: {
+		username: string
+		avatar_path: string
+		is_liked: boolean | null
+		is_disliked: boolean | null
+	}
 }

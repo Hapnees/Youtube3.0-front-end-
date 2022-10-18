@@ -16,6 +16,8 @@ const HomePage = () => {
 
 	useEffect(() => {
 		const value = searchParams.get('search')
+		console.log('value -> ', value)
+		console.log('isMounted -> ', isMounted)
 		if (isMounted.current || value) searchVideos(value || '')
 		isMounted.current = true
 	}, [searchParams.get('search')])
@@ -28,7 +30,11 @@ const HomePage = () => {
 				searchedVideos.length ? (
 					<VideoGrid videosHomePage={searchedVideos} />
 				) : searchParams.get('search') ? (
-					<p>{`Видео по запросу "${searchParams.get('search')}" не найдены`}</p>
+					<div className='flex gap-1 text-3xl mt-10 ml-10'>
+						<p>Видео по запросу </p>
+						<p className='text-red-400'>{searchParams.get('search')}</p>
+						<p>не найдены</p>
+					</div>
 				) : (
 					!!videoData && <VideoGrid videosHomePage={videoData} />
 				)

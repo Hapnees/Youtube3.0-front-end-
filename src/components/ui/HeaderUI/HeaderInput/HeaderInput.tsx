@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react'
 import cl from './HeaderInput.module.scss'
 import { AiOutlineSearch } from 'react-icons/ai'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useLazySearchVideosQuery } from '../../../../api/user.api'
 import { useActions } from '../../../../hooks/useActions'
 
 const HedaerInput: FC<React.HTMLProps<HTMLInputElement>> = props => {
+	const navigate = useNavigate()
 	const [searchParams, setSearchParams] = useSearchParams()
 	const [value, setValue] = useState('')
 

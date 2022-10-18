@@ -31,10 +31,17 @@
 .button__like {
 	@apply hover:bg-[#ac2d2d] hover:border-transparent;
 }
-// @apply bg-[#be3f3f] hover:bg-[#a90000];
+
+.button__like__active {
+	@apply border-transparent bg-[#ac2d2d];
+}
 
 .button__dislike {
 	@apply hover:bg-[#2d5cac] hover:border-transparent;
+}
+
+.button__dislike__active {
+	@apply border-transparent bg-[#2d5cac];
 }
 
 .button__share {
@@ -88,6 +95,7 @@
 
 .like_dislike__count {
 	@apply text-zinc-400 text-sm;
+	height: 24px;
 }
 
 @keyframes volume {

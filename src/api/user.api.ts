@@ -108,6 +108,34 @@ export const userApi = createApi({
 			}),
 		}),
 
+		addLikeVideo: build.mutation<
+			{ message: string; videoId: number },
+			{ id: number; token: string }
+		>({
+			query: ({ id, token }) => ({
+				url: 'video/like/add',
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${token}` },
+				body: { id },
+			}),
+
+			invalidatesTags: ['Video'],
+		}),
+
+		addDislikeVideo: build.mutation<
+			{ message: string; videoId: number },
+			{ id: number; token: string }
+		>({
+			query: ({ id, token }) => ({
+				url: 'video/dislike/add',
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${token}` },
+				body: { id },
+			}),
+
+			invalidatesTags: ['Video'],
+		}),
+
 		addComment: build.mutation<
 			{ commentId: number },
 			{ comment: ICommentSend; token: string }
@@ -130,6 +158,32 @@ export const userApi = createApi({
 			}),
 			providesTags: ['Comment'],
 		}),
+
+		addLikeComment: build.mutation<
+			{ message: string; commentId: number },
+			{ body: { userId: number; commentId: number }; token: string }
+		>({
+			query: ({ body, token }) => ({
+				url: 'comment/like',
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${token}` },
+				body,
+			}),
+			invalidatesTags: ['Comment'],
+		}),
+
+		addDislikeComment: build.mutation<
+			{ message: string; commentId: number },
+			{ body: { userId: number; commentId: number }; token: string }
+		>({
+			query: ({ body, token }) => ({
+				url: 'comment/dislike',
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${token}` },
+				body,
+			}),
+			invalidatesTags: ['Comment'],
+		}),
 	}),
 })
 
@@ -148,4 +202,8 @@ export const {
 	useSearchVideosQuery,
 	useAddCommentMutation,
 	useGetCommentsQuery,
+	useAddLikeVideoMutation,
+	useAddDislikeVideoMutation,
+	useAddLikeCommentMutation,
+	useAddDislikeCommentMutation,
 } = userApi
