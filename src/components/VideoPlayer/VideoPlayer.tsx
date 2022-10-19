@@ -13,10 +13,12 @@ import { timeFormat } from '../../utils/time.format'
 import { HiRewind } from 'react-icons/hi'
 
 const VideoPlayer = () => {
+	const [videoClicked, setVideoClicked] = useState(0)
 	const [tempVolume, setTempVolume] = useState(100)
 	const params: any = useParams()
 	const [isClickedRightArrow, setIsClickedRightArrow] = useState(false)
 	const [isClickedLeftArrow, setIsClickedLeftArrow] = useState(false)
+	const [isClickedUpOrDownArrow, setIsClickedUpOrDownArrow] = useState(false)
 	const [isPaused, setIsPaused] = useState(true)
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [volume, setVolume] = useState(100)
@@ -25,6 +27,7 @@ const VideoPlayer = () => {
 	const { data: videoData, isLoading: isVideoLoading } = useGetVideoByIdQuery(
 		params.id
 	)
+
 	const getBackgroundSizeVolume = () => {
 		return { backgroundSize: `${volume}% 100%` }
 	}
@@ -58,6 +61,10 @@ const VideoPlayer = () => {
 		}
 	}
 
+	const handleClickFullScreen = () => {
+		videoRef.current?.requestFullscreen()
+	}
+
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (videoRef.current) {
 			if (event.key === 'ArrowRight') {
@@ -72,6 +79,22 @@ const VideoPlayer = () => {
 				setTimeout(() => {
 					setIsClickedLeftArrow(false)
 				}, 200)
+			} else if (event.key === 'ArrowUp') {
+				event.preventDefault()
+				videoRef.current.volume += 0.1
+				setVolume(prev => prev + 10)
+				setIsClickedUpOrDownArrow(true)
+				setTimeout(() => {
+					setIsClickedUpOrDownArrow(false)
+				}, 200)
+			} else if (event.key === 'ArrowDown') {
+				event.preventDefault()
+				videoRef.current.volume -= 0.1
+				setVolume(prev => prev - 10)
+				setIsClickedUpOrDownArrow(true)
+				setTimeout(() => {
+					setIsClickedUpOrDownArrow(false)
+				}, 200)
 			} else if (event.key === ' ' || event.key === 'Enter') {
 				event.preventDefault()
 				if (isPaused) {
@@ -81,20 +104,57 @@ const VideoPlayer = () => {
 					videoRef.current?.pause()
 					setIsPaused(true)
 				}
+			} else if (event.key === 'f') {
+				if (document.fullscreenElement) document.exitFullscreen()
+				else videoRef.current.requestFullscreen()
 			}
 		}
 	}
 
+	//Обрабатываем двойной клик
+	useEffect(() => {
+		if (videoRef.current && videoClicked > 1) {
+			if (document.fullscreenElement) document.exitFullscreen()
+			else videoRef.current.requestFullscreen()
+		}
+
+		setTimeout(() => {
+			setVideoClicked(0)
+		}, 200)
+	}, [videoClicked])
+
+	const handleClickVideo = () => {
+		handleTogglePlay()
+		setVideoClicked(prev => prev + 1)
+	}
+
 	return (
 		<div className='relative w-full'>
-			{isClickedLeftArrow && <HiRewind className={cl.rewind} />}
-			{isClickedRightArrow && <HiRewind className={cl.rewind__rotate} />}
+			{isClickedUpOrDownArrow && (
+				<div className={cl.volume__notif}>
+					<BsFillVolumeUpFill size={70} />
+					<p className='text-[40px]'>{volume}%</p>
+				</div>
+			)}
+			{isClickedLeftArrow && (
+				<div className={`${cl.rewind} ${cl.rewind__left}`}>
+					<HiRewind size={90} />
+					<p>10 сек</p>
+				</div>
+			)}
+			{isClickedRightArrow && (
+				<div className={`${cl.rewind} ${cl.rewind__right}`}>
+					<HiRewind size={90} className='rotate-180' />
+					<p>10 сек</p>
+				</div>
+			)}
 			{!isPaused ? (
 				<FaPlay className={cl.play} />
 			) : (
 				<IoMdPause className={cl.play} />
 			)}
 			<video
+				id='video'
 				onKeyDown={event => handleKeyDown(event)}
 				ref={videoRef}
 				src={videoData?.video_path}
@@ -105,9 +165,9 @@ const VideoPlayer = () => {
 							event.currentTarget.duration
 					)
 				}
-				onClick={handleTogglePlay}
+				onClick={handleClickVideo}
 			></video>
-			<div className='absolute bottom-0 right-0 flex flex-col w-full'>
+			<div className={cl.panel}>
 				<div className='relative'>
 					<div className={cl.progress__container}>
 						<input
@@ -152,7 +212,7 @@ const VideoPlayer = () => {
 									) : (
 										<BsFillVolumeMuteFill
 											size={33}
-											className='cursor-pointer pr-3'
+											className='cursor-pointer pr-3 opacity-60'
 											onClick={handleClickMuteIcon}
 										/>
 									)}
@@ -192,7 +252,11 @@ const VideoPlayer = () => {
 
 						<div className='flex items-center gap-4'>
 							<IoMdSettings size={23} className='cursor-pointer' />
-							<BiFullscreen size={23} />
+							<BiFullscreen
+								size={23}
+								onClick={handleClickFullScreen}
+								className='cursor-pointer'
+							/>
 						</div>
 					</div>
 				</div>

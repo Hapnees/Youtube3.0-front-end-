@@ -26,6 +26,7 @@ import { dateAgoFormat } from '../../utils/dateAgo.format'
 import VideoPlayer from '../../components/VideoPlayer/VideoPlayer'
 import { toast } from 'react-toastify'
 import { toastConfig } from '../../config/toast.config'
+import { countCommentFormat } from '../../utils/countComment.format'
 
 const VideoPage = () => {
 	const [addDislikeComment] = useAddDislikeCommentMutation()
@@ -214,7 +215,9 @@ const VideoPage = () => {
 						</div>
 
 						<div className='flex flex-col gap-4'>
-							<p>83 комментария</p>
+							<p>{`${numberFormat(
+								CommentsData?.length || 0
+							)} ${countCommentFormat(CommentsData?.length || 0)}`}</p>
 
 							<div className='flex flex-col gap-6'>
 								<div>

@@ -1,23 +1,37 @@
 $play__size: 100px;
 
+.panel {
+	@apply absolute bottom-0 right-0 flex flex-col w-full pt-24;
+	opacity: 0;
+	transition: opacity 0.3s;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+.volume__notif {
+	@apply absolute left-[50%] top-[15%] flex items-center gap-2;
+	background: rgba(0, 0, 0, 0.2);
+	opacity: 0;
+	animation: play 1s;
+}
+
 .rewind {
-	@apply absolute bottom-[50%] left-[15%] p-4 rounded-xl pointer-events-none;
-	height: $play__size;
-	width: $play__size;
+	@apply absolute bottom-[50%] flex flex-col items-center p-4 rounded-xl pointer-events-none;
+
 	background: rgba(0, 0, 0, 0.2);
 	opacity: 0;
 
 	animation: play 1s;
 }
 
-.rewind__rotate {
-	@apply absolute bottom-[50%] right-[15%] p-4 rounded-xl pointer-events-none rotate-180;
-	height: $play__size;
-	width: $play__size;
-	background: rgba(0, 0, 0, 0.2);
-	opacity: 0;
+.rewind__left {
+	@apply left-[15%];
+}
 
-	animation: play 1s;
+.rewind__right {
+	@apply right-[15%];
 }
 
 .play {
@@ -32,7 +46,6 @@ $play__size: 100px;
 
 .player {
 	@apply rounded-lg;
-	// opacity: 0;
 	z-index: 999;
 	box-shadow: 0 0 5px black;
 	width: 1150px;
@@ -65,10 +78,6 @@ $play__size: 100px;
 	appearance: none;
 	-moz-appearance: none;
 	-webkit-appearance: none;
-
-	// &:hover::-moz-range-thumb {
-	// 	opacity: 1;
-	// }
 
 	&::-moz-range-thumb {
 		@apply border border-transparent rounded-full;
