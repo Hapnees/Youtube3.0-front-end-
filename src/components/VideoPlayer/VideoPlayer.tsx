@@ -13,6 +13,7 @@ import { timeFormat } from '../../utils/time.format'
 import { HiRewind } from 'react-icons/hi'
 
 const VideoPlayer = () => {
+	const [tempVolume, setTempVolume] = useState(100)
 	const params: any = useParams()
 	const [isClickedRightArrow, setIsClickedRightArrow] = useState(false)
 	const [isClickedLeftArrow, setIsClickedLeftArrow] = useState(false)
@@ -33,11 +34,18 @@ const VideoPlayer = () => {
 	}
 
 	const handleClickVolumeIcon = () => {
-		setVolume(0)
+		if (videoRef.current) {
+			setTempVolume(volume)
+			setVolume(0)
+			videoRef.current.volume = 0
+		}
 	}
 
 	const handleClickMuteIcon = () => {
-		setVolume(100)
+		if (videoRef.current) {
+			setVolume(tempVolume)
+			videoRef.current.volume = tempVolume / 100
+		}
 	}
 
 	const handleTogglePlay = () => {
