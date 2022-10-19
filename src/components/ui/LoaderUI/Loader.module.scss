@@ -1,36 +1,36 @@
 $size: 250px;
 
 .title {
-	@apply tracking-wider text-center text-[40px] mb-[100px];
-
-	animation: title 4s infinite;
+	@apply tracking-wider text-[40px];
+	color: palevioletred;
 }
 
 .loader {
-	@apply border border-dashed border-white rounded-full mx-auto;
-	width: $size;
-	height: $size;
-	padding: 40px;
+	> span {
+		display: inline-block;
+		background-color: purple;
+		width: 0;
+		height: 0;
+		border-radius: 50%;
+		margin: 0 8px;
+		transform: translate3d(0);
+		animation: bounce 0.6s infinite alternate;
+	}
 
-	animation: loader 4s infinite;
+	> span:nth-child(2) {
+		background-color: palevioletred;
+		animation-delay: 0.2s;
+	}
+
+	> span:nth-child(3) {
+		animation-delay: 0.4s;
+	}
 }
 
-@keyframes loader {
-	from {
-		transform: scale(1) rotate(0);
-		@apply border-white;
-	}
+@keyframes bounce {
 	to {
-		transform: scale(1.5) rotate(360deg);
-		@apply border-black;
-	}
-}
-
-@keyframes title {
-	from {
-		@apply text-white;
-	}
-	to {
-		@apply text-black;
+		width: 16px;
+		height: 16px;
+		transform: translate3d(0, -16px, 0);
 	}
 }
