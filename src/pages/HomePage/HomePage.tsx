@@ -41,7 +41,7 @@ const HomePage = () => {
 	}, [search])
 
 	return (
-		<div className='mt-4'>
+		<div className='mt-4 w-full'>
 			{isLoadingSearchedVideos || isLoadingVideoData ? (
 				<Loader />
 			) : searchedVideos ? (
