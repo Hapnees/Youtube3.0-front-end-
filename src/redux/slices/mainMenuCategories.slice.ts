@@ -1,30 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface item {
-	id: number
-	isChecked: boolean
-}
-
 interface IState {
-	category: item[]
+	category: string
 }
 
-const initialState: IState = {
-	category: [
-		{ id: 1, isChecked: true },
-		{ id: 2, isChecked: false },
-		{ id: 3, isChecked: false },
-		{ id: 4, isChecked: false },
-		{ id: 5, isChecked: false },
-		{ id: 6, isChecked: false },
-	],
-}
+const initialState: IState = { category: 'general' }
 
 export const mainMenuCategoriesSlice = createSlice({
 	name: 'mainMenuCategories',
 	initialState,
 	reducers: {
-		setChecks: (state, action: PayloadAction<item[]>) => {
+		setChecks: (state, action: PayloadAction<string>) => {
 			state.category = action.payload
 		},
 	},

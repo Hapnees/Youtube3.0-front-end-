@@ -2,34 +2,30 @@ import React, { FC, useEffect, useState } from 'react'
 import cl from './HeaderInput.module.scss'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useLazySearchVideosQuery } from '../../../../api/user.api'
 import { useActions } from '../../../../hooks/useActions'
 import { useTypedSelector } from '../../../../hooks/useTypedSelector'
 
 const HedaerInput: FC<React.HTMLProps<HTMLInputElement>> = props => {
-	const [value, setValue] = useState('')
-	const navigate = useNavigate()
 	const { setSearch } = useActions()
+	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
+	const [value, setValue] = useState(searchParams.get('search') || '')
 
-	// Заносим параметры в input
+	// Заносим данные из адресной строки в redux-state
 	useEffect(() => {
-		const _value = searchParams.get('search')
-		if (_value) {
-			setValue(_value)
-		}
+		setSearch(searchParams.get('search') || '')
 	}, [])
 
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === 'Enter') {
-			setSearch(value)
 			navigate('/')
+			setSearch(value)
 		}
 	}
 
 	const handleClickSearch = () => {
-		setSearch(value)
 		navigate('/')
+		setSearch(value)
 	}
 
 	return (

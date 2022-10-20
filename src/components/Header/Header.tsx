@@ -29,24 +29,28 @@ const Header = () => {
 				<div className={cl.section__2}>
 					<HedaerInput placeholder='Поиск...' />
 
-					{isAuth ? (
-						<HeaderMenu />
-					) : (
-						<div className='relative'>
-							<LoginButton
-								isClickedLoginButton={isClickedLoginButton}
-								onClick={() => setIsClickedLoginButton(!isClickedLoginButton)}
-							/>
-							<CSSTransition
-								in={isClickedLoginButton}
-								timeout={300}
-								unmountOnExit
-								classNames='auth'
-							>
-								<LoginForm setIsClickedLoginButton={setIsClickedLoginButton} />
-							</CSSTransition>
-						</div>
-					)}
+					<div className='h-[50px] flex items-center'>
+						{isAuth ? (
+							<HeaderMenu />
+						) : (
+							<div className='relative'>
+								<LoginButton
+									isClickedLoginButton={isClickedLoginButton}
+									onClick={() => setIsClickedLoginButton(!isClickedLoginButton)}
+								/>
+								<CSSTransition
+									in={isClickedLoginButton}
+									timeout={300}
+									unmountOnExit
+									classNames='auth'
+								>
+									<LoginForm
+										setIsClickedLoginButton={setIsClickedLoginButton}
+									/>
+								</CSSTransition>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

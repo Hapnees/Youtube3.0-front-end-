@@ -5,7 +5,9 @@ interface IState {
 	user: IAuthSlice
 }
 
-const initialState = {} as IState
+const initialState: IState = {
+	user: { email: '', username: '', avatarPath: '', id: 0, token: '' },
+}
 
 export const authSlice = createSlice({
 	name: 'auth',

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetProfileByUsernameQuery } from '../../api/user.api'
 import profileIcon from '../../assets/img/profile.png'
@@ -7,16 +7,18 @@ import VideoGrid from '../../components/ui/VideoGridUI/VideoGrid'
 import cl from './ProfileByUsernamePage.module.scss'
 
 const ProfileByUsernamePage = () => {
+	const [radio, setRadio] = useState('video')
 	const params: any = useParams()
 	const { data: profileData } = useGetProfileByUsernameQuery(params.username)
+
 	return (
 		<div className='flex flex-col gap-4 grow'>
 			<div>
 				<div className={cl.header}>
 					<img
-						src={profileData?.headerPath}
+						src={profileData?.header_path}
 						alt=''
-						className='h-full w-full object-cover'
+						className='h-full w-full object-cover border border-transparent'
 					/>
 				</div>
 				<div className={cl.info}>
@@ -24,7 +26,7 @@ const ProfileByUsernamePage = () => {
 						<div className='flex items-center justify-between grow'>
 							<div className='flex items-center gap-4'>
 								<img
-									src={profileData?.avatarPath || profileIcon}
+									src={profileData?.avatar_path || profileIcon}
 									alt='profileIcon'
 									width={70}
 									className='rounded-full'
@@ -43,17 +45,41 @@ const ProfileByUsernamePage = () => {
 
 							<SubscribeButton>Подписаться</SubscribeButton>
 						</div>
-						<ul className={cl.menu}>
-							<li>Видео</li>
-							<li>Плейлисты</li>
-							<li>О канале</li>
-						</ul>
+						<div className={cl.menu}>
+							<input
+								type='radio'
+								name='profile'
+								value='video'
+								id='video'
+								checked={radio === 'video'}
+								onChange={() => setRadio('video')}
+							/>
+							<label htmlFor='video'>Видео</label>
+							<input
+								type='radio'
+								name='profile'
+								value='playlist'
+								id='playlist'
+								checked={radio === 'playlist'}
+								onChange={() => setRadio('playlist')}
+							/>
+							<label htmlFor='playlist'>Плейлисты</label>
+							<input
+								type='radio'
+								name='profile'
+								value='about'
+								id='about'
+								checked={radio === 'about'}
+								onChange={() => setRadio('about')}
+							/>
+							<label htmlFor='about'>О канале</label>
+						</div>
 					</div>
 				</div>
 			</div>
-			{!!profileData && (
-				<VideoGrid videos={profileData?.videos || []} user={profileData} />
-			)}
+			{/* {!!profileData && (
+
+			)} */}
 		</div>
 	)
 }

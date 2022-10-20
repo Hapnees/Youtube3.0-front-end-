@@ -1,4 +1,4 @@
-export interface IVideoGetPage {
+export interface IVideoGetVideoPage {
 	id: number
 	vid: number
 	title: string
@@ -11,9 +11,11 @@ export interface IVideoGetPage {
 	video_path: string
 	created_at: Date
 	user: {
+		id: number
 		username: string
 		avatar_path: string
 		is_liked: boolean | null
 		is_disliked: boolean | null
+		is_subscribed: boolean | null
 	}
 }

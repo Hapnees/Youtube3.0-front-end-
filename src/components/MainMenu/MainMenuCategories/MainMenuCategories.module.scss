@@ -1,8 +1,39 @@
+@import '../../../styles/variables.scss';
+
 .menu {
 	@apply flex flex-col gap-3 my-6;
+	width: 200px;
+
+	> input {
+		display: none;
+
+		&:checked + label {
+			@apply text-white;
+
+			> .icon {
+				@apply bg-[#c93d3d];
+			}
+		}
+	}
+
+	> label {
+		@apply flex items-center gap-3 border border-transparent px-2 py-1 cursor-pointer rounded-md duration-300 
+	hover:border-zinc-800 hover:bg-zinc-900;
+		color: $main_menu__text__color;
+
+		> p {
+			@apply tracking-wide;
+		}
+	}
 
 	&:after {
 		content: '';
 		@apply block bg-[#1e1e1e] h-[2px] w-[90%] mt-1;
 	}
+}
+
+.icon {
+	@apply p-[6px] bg-[#242424] text-lg rounded-xl;
+	width: 36px;
+	height: 36px;
 }

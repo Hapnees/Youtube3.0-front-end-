@@ -12,6 +12,22 @@ import 'react-toastify/dist/ReactToastify.css'
 import { toastContainerConfig } from './config/toast.config'
 import Loader from './components/ui/LoaderUI/Loader'
 
+/*
+TODO:
+	[X] - Subscription-system
+	[ ] - Fullscreen mode in VidePlayer
+	[ ] - ProfilePage
+	[ ] - Video delete-protection
+*/
+
+/*
+FIXME: 
+	[X] - Negative volume (when press arrowDown)
+	[ ] - Correct duration
+	[X] - Sticky MainMenu
+	[ ] - Correct date-age-format
+*/
+
 const persistor = persistStore(store)
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)

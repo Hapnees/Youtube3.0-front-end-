@@ -20,20 +20,18 @@ import { userApi } from '../api/user.api'
 import { mediaApi } from '../api/media.api'
 import { modalWindowReducer } from './slices/modalWindow.slice'
 import { inputSlice } from './slices/input.slice'
-import { durationReducer, durationSlice } from './slices/duration.slice'
 
 const persistConfig = {
 	key: 'root',
 	version: 1,
 	storage,
-	whitelist: [authSlice.name, mainMenuCategoriesSlice.name, durationSlice.name],
+	whitelist: [authSlice.name, mainMenuCategoriesSlice.name],
 }
 
 const rootReducer = combineReducers({
 	[authApi.reducerPath]: authApi.reducer,
 	[userApi.reducerPath]: userApi.reducer,
 	[mediaApi.reducerPath]: mediaApi.reducer,
-	duration: durationReducer,
 	input: inputSlice.reducer,
 	auth: authSlice.reducer,
 	mainMenuCategories: mainMenuCategoriesReducer,

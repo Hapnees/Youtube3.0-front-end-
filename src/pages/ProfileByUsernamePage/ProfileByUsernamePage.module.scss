@@ -1,4 +1,5 @@
 .header {
+	@apply border border-transparent;
 	height: 300px;
 }
 
@@ -9,8 +10,15 @@
 
 .menu {
 	@apply flex gap-1;
+	> input {
+		display: none;
 
-	> li {
+		&:checked + label {
+			@apply text-zinc-300 bg-zinc-800;
+		}
+	}
+
+	> label {
 		@apply text-zinc-500 py-2 px-6 cursor-pointer uppercase rounded-md
 		hover:text-zinc-300 hover:bg-zinc-800 duration-300;
 

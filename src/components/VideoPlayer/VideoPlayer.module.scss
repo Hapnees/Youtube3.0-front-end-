@@ -1,7 +1,7 @@
 $play__size: 100px;
 
 .panel {
-	@apply absolute bottom-0 right-0 flex flex-col w-full pt-24;
+	@apply absolute bottom-0 right-0 flex flex-col w-full pt-[150px];
 	opacity: 0;
 	transition: opacity 0.3s;
 
@@ -48,9 +48,11 @@ $play__size: 100px;
 	@apply rounded-lg;
 	z-index: 999;
 	box-shadow: 0 0 5px black;
-	width: 0;
-	width: 1150px;
+	width: 100%;
+	max-width: 1150;
 	max-height: 600px;
+	height: 100%;
+	background-color: black;
 }
 
 .progress__container {

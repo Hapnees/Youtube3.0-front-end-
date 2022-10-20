@@ -51,12 +51,16 @@ const ProfileEditPage = () => {
 
 	// Заносим данные из profileData в поля формы при запуске
 	useEffect(() => {
-		if (profileData?.username) setValue('username', profileData.username)
-		if (profileData?.email) setValue('email', profileData.email)
-		if (profileData?.description)
-			setValue('description', profileData.description)
-		if (profileData?.avatarPath) setValue('avatarPath', profileData?.avatarPath)
-		if (profileData?.headerPath) setValue('headerPath', profileData?.headerPath)
+		if (profileData) {
+			if (profileData.username) setValue('username', profileData.username)
+			if (profileData.email) setValue('email', profileData.email)
+			if (profileData.description)
+				setValue('description', profileData.description)
+			if (profileData.avatar_path)
+				setValue('avatarPath', profileData.avatar_path)
+			if (profileData.header_path)
+				setValue('headerPath', profileData.header_path)
+		}
 	}, [profileData])
 
 	const [avatarImg, setAvatarImg] = useState()
@@ -85,7 +89,7 @@ const ProfileEditPage = () => {
 			console.log(imgValidData)
 			if (!imgValidData.status) {
 				toast.error(
-					`Некорректный формат изображения ${imgValidData.ext}`,
+					`Некорректный формат изображения .${imgValidData.ext}`,
 					toastConfig
 				)
 				return
@@ -160,116 +164,128 @@ const ProfileEditPage = () => {
 			{isLoadingProfileData ? (
 				<Loader />
 			) : (
-				<div className='grow'>
-					<div>
-						<img
-							src={headerUrl || profileData?.headerPath}
-							className={cl.header}
-						></img>
-						<label
-							className='block text-end text-[#4eb3ea] mr-10 mt-1 cursor-pointer hover:underline'
-							htmlFor='header'
-						>
-							Изменить шапку
-						</label>
-						<input
-							type='file'
-							id='header'
-							className='hidden'
-							accept='.png, .jpg, .jpeg'
-							onChange={handleChangeHeader}
-						/>
-					</div>
-
-					<form
-						className='inline-flex flex-col gap-[50px] w-full'
-						onSubmit={handleSubmit(onSubmit)}
-						noValidate
-					>
-						<div className='flex justify-between mr-[100px]'>
-							<div className='flex items-center gap-[50px]'>
-								<div className='relative'>
-									<img
-										src={avatarUrl || profileData?.avatarPath || ava}
-										alt='avatarIcon'
-										className='object-cover w-[200px] h-[200px]'
-									/>
-									<input
-										type='file'
-										id='avatar'
-										className='hidden'
-										accept='.png, .jpg, .jpeg'
-										onChange={handleChangeAvatar}
-									/>
-									<label
-										className='block absolute right-[20%] bottom-[-14%] text-[#4eb3ea] cursor-pointer hover:underline'
-										htmlFor='avatar'
-									>
-										Изменить фото
-									</label>
-								</div>
-								<div className='flex flex-col gap-4'>
-									<div className='flex items-center gap-2'>
-										<p className='text-zinc-500 w-[150px]'>Имя пользователя</p>
-										<AuthInput
-											className={cl.input}
-											placeholder='Имя пользователя'
-											{...register('username', {
-												required: 'Обязательное поле',
-												minLength: { value: 3, message: 'Минимум 3 символа' },
-											})}
-											error={errors.username}
-											autoComplete='off'
-											horizontal={true}
-										/>
-									</div>
-									<div className='flex items-center gap-2'>
-										<p className='text-zinc-500 w-[150px]'>Почта</p>
-										<AuthInput
-											className={cl.input}
-											placeholder='Почта'
-											{...register('email', {
-												required: 'Обязательное поле',
-												pattern: {
-													value:
-														/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-													message: 'Некорректный email',
-												},
-											})}
-											error={errors.email}
-											autoComplete='off'
-											horizontal={true}
-										/>
-									</div>
-									<div className='flex items-center gap-2'>
-										<p className='text-zinc-500 w-[150px]'>Новый пароль</p>
-										<AuthInput
-											className={cl.input}
-											placeholder='Пароль'
-											type='password'
-											{...register('password', {
-												minLength: { value: 6, message: 'Минимум 6 символов' },
-											})}
-											error={errors.password}
-											horizontal={true}
-										/>
-									</div>
-								</div>
+				<>
+					{profileData && (
+						<div className='grow'>
+							<div>
+								<img
+									src={headerUrl || profileData.header_path}
+									className={cl.header}
+								></img>
+								<label
+									className='block text-end text-[#4eb3ea] mr-10 mt-1 cursor-pointer hover:underline'
+									htmlFor='header'
+								>
+									Изменить шапку
+								</label>
+								<input
+									type='file'
+									id='header'
+									className='hidden'
+									accept='.png, .jpg, .jpeg'
+									onChange={handleChangeHeader}
+								/>
 							</div>
-							<SubscribeButton>Сохранить</SubscribeButton>
+
+							<form
+								className='inline-flex flex-col gap-[50px] w-full'
+								onSubmit={handleSubmit(onSubmit)}
+								noValidate
+							>
+								<div className='flex justify-between mr-[100px]'>
+									<div className='flex items-center gap-[50px]'>
+										<div className='relative'>
+											<img
+												src={avatarUrl || profileData.avatar_path || ava}
+												alt='avatarIcon'
+												className='object-cover w-[200px] h-[200px]'
+											/>
+											<input
+												type='file'
+												id='avatar'
+												className='hidden'
+												accept='.png, .jpg, .jpeg'
+												onChange={handleChangeAvatar}
+											/>
+											<label
+												className='block absolute right-[20%] bottom-[-14%] text-[#4eb3ea] cursor-pointer hover:underline'
+												htmlFor='avatar'
+											>
+												Изменить фото
+											</label>
+										</div>
+										<div className='flex flex-col gap-4'>
+											<div className='flex items-center gap-2'>
+												<p className='text-zinc-500 w-[150px]'>
+													Имя пользователя
+												</p>
+												<AuthInput
+													className={cl.input}
+													placeholder='Имя пользователя'
+													{...register('username', {
+														required: 'Обязательное поле',
+														minLength: {
+															value: 3,
+															message: 'Минимум 3 символа',
+														},
+													})}
+													error={errors.username}
+													autoComplete='off'
+													horizontal={true}
+												/>
+											</div>
+											<div className='flex items-center gap-2'>
+												<p className='text-zinc-500 w-[150px]'>Почта</p>
+												<AuthInput
+													className={cl.input}
+													placeholder='Почта'
+													{...register('email', {
+														required: 'Обязательное поле',
+														pattern: {
+															value:
+																/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+															message: 'Некорректный email',
+														},
+													})}
+													error={errors.email}
+													autoComplete='off'
+													horizontal={true}
+												/>
+											</div>
+											<div className='flex items-center gap-2'>
+												<p className='text-zinc-500 w-[150px]'>Новый пароль</p>
+												<AuthInput
+													className={cl.input}
+													placeholder='Пароль'
+													type='password'
+													{...register('password', {
+														minLength: {
+															value: 6,
+															message: 'Минимум 6 символов',
+														},
+													})}
+													error={errors.password}
+													horizontal={true}
+												/>
+											</div>
+										</div>
+									</div>
+									<SubscribeButton>Сохранить</SubscribeButton>
+								</div>
+								<div className='flex flex-col gap-2'>
+									<p className='text-zinc-500'>Описание канала</p>
+									<textarea
+										{...register('description')}
+										placeholder='Описание канала'
+										rows={8}
+										cols={100}
+										className='self-start bg-[#1d1d1d] px-4 py-2 resize-none rounded-md'
+									></textarea>
+								</div>
+							</form>
 						</div>
-						<div className='flex flex-col gap-2'>
-							<p className='text-zinc-500'>Описание канала</p>
-							<textarea
-								{...register('description')}
-								placeholder='Описание канала'
-								rows={8}
-								cols={100}
-								className='self-start bg-[#1d1d1d] px-4 py-2 resize-none rounded-md'
-							></textarea>
-						</div>
-					</form>
-				</div>
+					)}
+				</>
 			)}
 		</>
 	)

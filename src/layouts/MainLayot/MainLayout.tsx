@@ -44,7 +44,7 @@ const MainLayout = () => {
 				<ModalWindow>{modalWindow()}</ModalWindow>
 			</CSSTransition>
 			<Header />
-			<div className='flex'>
+			<div className='flex '>
 				<MainMenu />
 				<Outlet />
 			</div>

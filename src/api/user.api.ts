@@ -1,16 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { ICommentGet } from '../models/comment/comment-get.interface'
 import { ICommentSend } from '../models/comment/comment-send.interface'
+import { IUserGetByUsername } from '../models/user/user-get-byusername.interface'
 import { IUserGet } from '../models/user/user-get.interface'
 import { IUserUpdate } from '../models/user/user-update.interface'
 import { IVideoAdd } from '../models/video/video-add.interface'
-import { IVideoGetHomePage } from '../models/video/video-get-hpage.interface'
-import { IVideoGetPage } from '../models/video/video-get-page.interface'
+import { IVideoGetVideoCard } from '../models/video/video-get-VideoCardinterface'
+import { IVideoGetVideoPage } from '../models/video/video-get-page.interface'
 import { IVideoUpdate } from '../models/video/video-uptadte.interface'
+import { IVideoGetVideoCardPlus } from '../models/video/vide-get-VideoCardPlus'
 
 export const userApi = createApi({
 	reducerPath: 'userApi',
-	tagTypes: ['User', 'Video', 'Comment'],
+	tagTypes: ['User', 'Video', 'Comment', 'ProfileVideos'],
 	baseQuery: fetchBaseQuery({
 		baseUrl: 'http://localhost:4000/api/',
 	}),
@@ -23,7 +25,7 @@ export const userApi = createApi({
 			providesTags: ['User'],
 		}),
 
-		getProfileByUsername: build.query<IUserGet, string>({
+		getProfileByUsername: build.query<IUserGetByUsername, string>({
 			query: username => ({
 				url: `user/${username}`,
 			}),
@@ -48,6 +50,14 @@ export const userApi = createApi({
 				body: userData,
 			}),
 			invalidatesTags: result => [{ type: 'User', username: result?.username }],
+		}),
+
+		getProfileVideos: build.query<IVideoGetVideoCardPlus[], string>({
+			query: token => ({
+				url: 'video/profile',
+				headers: { Authorization: `Bearer ${token}` },
+			}),
+			providesTags: ['ProfileVideos'],
 		}),
 
 		addVideo: build.mutation<
@@ -86,22 +96,25 @@ export const userApi = createApi({
 				headers: { Authorization: `Bearer ${token}` },
 				body: { id },
 			}),
-			invalidatesTags: result => [{ type: 'User', username: result?.username }],
+			invalidatesTags: ['ProfileVideos'],
 		}),
 
-		getVideoById: build.query<IVideoGetPage, number>({
-			query: id => ({
+		getVideoById: build.query<
+			IVideoGetVideoPage,
+			{ id: number; idFrom?: number }
+		>({
+			query: ({ id, idFrom }) => ({
 				url: 'video/byId',
-				params: { id },
+				params: { id, idFrom },
 			}),
 			providesTags: ['Video'],
 		}),
 
-		getVideos: build.query<IVideoGetHomePage[], void>({
+		getVideos: build.query<IVideoGetVideoCard[], void>({
 			query: () => 'video',
 		}),
 
-		searchVideos: build.query<IVideoGetHomePage[], string>({
+		searchVideos: build.query<IVideoGetVideoCard[], string>({
 			query: search => ({
 				url: 'video/search',
 				params: { search },
@@ -184,6 +197,19 @@ export const userApi = createApi({
 			}),
 			invalidatesTags: ['Comment'],
 		}),
+
+		subscribe: build.mutation<
+			{ message: string },
+			{ userId: number; token: string }
+		>({
+			query: ({ userId, token }) => ({
+				url: 'user/subscribe',
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${token}` },
+				body: { userId },
+			}),
+			invalidatesTags: ['Video'],
+		}),
 	}),
 })
 
@@ -206,4 +232,6 @@ export const {
 	useAddDislikeVideoMutation,
 	useAddLikeCommentMutation,
 	useAddDislikeCommentMutation,
+	useSubscribeMutation,
+	useGetProfileVideosQuery,
 } = userApi

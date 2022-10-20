@@ -17,6 +17,7 @@ import {
 	useAddLikeVideoMutation,
 	useGetCommentsQuery,
 	useGetVideoByIdQuery,
+	useSubscribeMutation,
 } from '../../api/user.api'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
 import { useAutosizeTextArea } from '../../hooks/useAutosizeTextarea'
@@ -29,6 +30,7 @@ import { toastConfig } from '../../config/toast.config'
 import { countCommentFormat } from '../../utils/countComment.format'
 
 const VideoPage = () => {
+	const [subscribe] = useSubscribeMutation()
 	const [addDislikeComment] = useAddDislikeCommentMutation()
 	const [addLikeComment] = useAddLikeCommentMutation()
 	const [addLikeVideo] = useAddLikeVideoMutation()
@@ -40,9 +42,10 @@ const VideoPage = () => {
 	const params: any = useParams()
 	const [isExpanded, setIsExpanded] = useState(false)
 	const [isClickedComment, setIsClickedComment] = useState(false)
-	const { data: videoData, isLoading: isVideoLoading } = useGetVideoByIdQuery(
-		params.id
-	)
+	const { data: videoData, isLoading: isVideoLoading } = useGetVideoByIdQuery({
+		id: params.id,
+		idFrom: user.id || 0,
+	})
 	const { data: CommentsData, isLoading: isCommentsLoading } =
 		useGetCommentsQuery(params.id)
 
@@ -112,7 +115,7 @@ const VideoPage = () => {
 				<Loader />
 			) : (
 				<div className='flex flex-col gap-4 mt-8 mx-8'>
-					<VideoPlayer />
+					<VideoPlayer videoData={videoData} />
 					<div className='w-[1150px] flex flex-col gap-2'>
 						<p className={cl.video__title}>{videoData?.title}</p>
 
@@ -193,7 +196,44 @@ const VideoPage = () => {
 										</div>
 									</div>
 
-									<SubscribeButton>Подписаться</SubscribeButton>
+									{user.token ? (
+										user.id !== videoData?.user.id ? (
+											videoData?.user.is_subscribed ? (
+												<SubscribeButton
+													onClick={() =>
+														subscribe({
+															userId: videoData?.user.id || 0,
+															token: user.token || '',
+														})
+													}
+												>
+													Подписаться
+												</SubscribeButton>
+											) : (
+												<button
+													className='text-zinc-400 bg-zinc-800 px-4 py-2 uppercase self-center rounded-md hover:bg-zinc-900 duration-300'
+													onClick={() =>
+														subscribe({
+															userId: videoData?.user.id || 0,
+															token: user.token || '',
+														})
+													}
+												>
+													вы подписаны
+												</button>
+											)
+										) : (
+											<></>
+										)
+									) : (
+										<SubscribeButton
+											onClick={() =>
+												toast.info('Войдите, чтобы подписаться', toastConfig)
+											}
+										>
+											Подписаться
+										</SubscribeButton>
+									)}
 								</div>
 
 								<div className='ml-16'>

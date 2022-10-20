@@ -1,101 +1,45 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import testAvatar from '../../assets/img/profile.png'
-import cl from './VideoCard.module.scss'
-import { IVideoGet } from '../../models/video/video-get.interface'
 import { dateAgoFormat } from '../../utils/dateAgo.format'
-import { IUserGet } from '../../models/user/user-get.interface'
-import { IAuthSlice } from '../../models/auth/auth.interface'
+import cl from './VideoCard.module.scss'
 import { numberFormat } from '../../utils/number.format'
-import { FaLock } from 'react-icons/fa'
-import { MdModeEdit } from 'react-icons/md'
-import { BsFillTrashFill } from 'react-icons/bs'
-import { CSSTransition } from 'react-transition-group'
-import { useTypedSelector } from '../../hooks/useTypedSelector'
-import { useActions } from '../../hooks/useActions'
-import { useDeleteVideoMutation } from '../../api/user.api'
-import { toast } from 'react-toastify'
-import { toastConfig } from '../../config/toast.config'
 import { Link, useNavigate } from 'react-router-dom'
+import { IVideoGetVideoCard } from '../../models/video/video-get-VideoCardinterface'
 
 interface IVideoCard {
-	video: IVideoGet
-	user: IUserGet | IAuthSlice
+	video: IVideoGetVideoCard
 }
 
-const VideoCard: FC<IVideoCard> = ({ video, user }) => {
+const VideoCard: FC<IVideoCard> = ({ video }) => {
 	const navigate = useNavigate()
-	const {
-		user: { token },
-	} = useTypedSelector(state => state.auth)
-	const [isOpenMenu, setIsOpenMenu] = useState(false)
-	const { setIsOpenModalWindow } = useActions()
-
-	const [deletVideo] = useDeleteVideoMutation()
-
-	const handleClickEdit = (event: any) => {
+	const handleClickAvatar = (event: any) => {
 		event.preventDefault()
-		setIsOpenModalWindow({ isOpen: true, type: 'edit', data: video })
+		navigate(`/user/${video.user.username}`)
 	}
-
-	const handleClickDelete = async (event: any) => {
-		event.preventDefault()
-		deletVideo({ id: video.id, token: token || '' })
-			.unwrap()
-			.then(data => toast.success(data.message, toastConfig))
-	}
-
 	return (
-		<Link to={`/video/${video.id}`} replace={true}>
+		<Link to={`video/${video.id}`}>
 			<div className={cl.container}>
 				<div className={cl.thumbnail__container}>
-					<div
-						className='w-full h-full flex items-center justify-center'
-						onMouseEnter={() => setIsOpenMenu(true)}
-						onMouseLeave={() => setIsOpenMenu(false)}
-					>
-						<img
-							src={video.thumbnailPath}
-							alt=''
-							className='object-cover h-full w-full rounded-t-md'
-						/>
-						<CSSTransition
-							in={isOpenMenu}
-							timeout={300}
-							unmountOnExit
-							classNames='auth'
-						>
-							<div className='absolute flex gap-2'>
-								<MdModeEdit
-									size={50}
-									className={cl.edit}
-									onClick={event => handleClickEdit(event)}
-								/>
-								<BsFillTrashFill
-									size={50}
-									className={cl.delete}
-									onClick={event => handleClickDelete(event)}
-								/>
-							</div>
-						</CSSTransition>
-					</div>
-
-					<div className='absolute inline-flex items-center w-full bottom-2 px-2'>
-						{video.isPrivate && <FaLock className={cl.lock} size={40} />}
-						<div className={cl.duration}>{video.duration}</div>
-					</div>
+					<img
+						src={video.thumbnail_path}
+						alt=''
+						className='object-cover h-full w-full rounded-t-md'
+					/>
+					<div className={cl.duration}>{video.duration}</div>
 				</div>
 
 				<div className='flex gap-2 px-3'>
 					<img
-						src={(!!user && user.avatarPath) || testAvatar}
+						src={video.user.avatar_path || testAvatar}
 						alt=''
-						className='rounded-full p-1 w-[55px] h-[55px] border border-zinc-400'
+						className='rounded-full p-1 border-2 h-[55px] w-[55px] border-zinc-400 hover:scale-110 hover:border-dashed hover:border-blue-400 duration-300'
+						onClick={event => handleClickAvatar(event)}
 					/>
 					<div className='overflow-hidden mt-1'>
 						<div>
 							<p className={cl.title}>{video.title}</p>
 							<p className='text-zinc-400 w-full whitespace-nowrap overflow-hidden text-ellipsis'>
-								{user && user.username}
+								{video.user.username}
 							</p>
 
 							<div className='flex gap-2 text-zinc-400 whitespace-nowrap'>
@@ -105,7 +49,7 @@ const VideoCard: FC<IVideoCard> = ({ video, user }) => {
 									</p>
 									<p>просмотров</p>
 								</div>
-								<p>{dateAgoFormat(video.createdAt)}</p>
+								<p>{dateAgoFormat(video.created_at)}</p>
 							</div>
 						</div>
 					</div>

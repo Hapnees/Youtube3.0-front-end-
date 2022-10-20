@@ -1,5 +1,3 @@
-import { IUserGetMini } from '../user/user-get-mini.interface'
-
 export interface IVideoGet {
 	id: number
 	vid: number

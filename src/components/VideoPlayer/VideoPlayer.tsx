@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { FaPlay } from 'react-icons/fa'
 import { BsFillVolumeUpFill } from 'react-icons/bs'
 import { BsFillVolumeMuteFill } from 'react-icons/bs'
@@ -6,42 +6,33 @@ import { CSSTransition } from 'react-transition-group'
 import { IoMdSettings } from 'react-icons/io'
 import { BiFullscreen } from 'react-icons/bi'
 import { IoMdPause } from 'react-icons/io'
-import { useGetVideoByIdQuery } from '../../api/user.api'
-import { useParams } from 'react-router-dom'
 import cl from './VideoPlayer.module.scss'
 import { timeFormat } from '../../utils/time.format'
 import { HiRewind } from 'react-icons/hi'
-import { useTypedSelector } from '../../hooks/useTypedSelector'
-import { useActions } from '../../hooks/useActions'
-import Loader from '../ui/LoaderUI/Loader'
+import { IVideoGetVideoPage } from '../../models/video/video-get-page.interface'
 
-const VideoPlayer = () => {
-	const { duration } = useTypedSelector(state => state.duration)
-	const { setDuration } = useActions()
+interface IState {
+	videoData: IVideoGetVideoPage | undefined
+}
 
-	const [isLoadedMetadata, setIsLoadedMetadata] = useState(false)
-	const [isLoadedDuration, setIsLoadedDuration] = useState(false)
+const VideoPlayer: FC<IState> = ({ videoData }) => {
+	const [progress, setProgress] = useState(0)
 
 	const [videoClicked, setVideoClicked] = useState(0)
 	const [tempVolume, setTempVolume] = useState(100)
-	const params: any = useParams()
 	const [isClickedRightArrow, setIsClickedRightArrow] = useState(false)
 	const [isClickedLeftArrow, setIsClickedLeftArrow] = useState(false)
 	const [isClickedUpOrDownArrow, setIsClickedUpOrDownArrow] = useState(false)
 	const [isPaused, setIsPaused] = useState(true)
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [volume, setVolume] = useState(100)
-	// const [progress, setProgress] = useState(0)
-	const { data: videoData, isLoading: isVideoLoading } = useGetVideoByIdQuery(
-		params.id
-	)
 
 	const getBackgroundSizeVolume = () => {
 		return { backgroundSize: `${volume}% 100%` }
 	}
 
 	const getBackgroundSizeProgress = () => {
-		return { backgroundSize: `${duration / 10}% 100%` }
+		return { backgroundSize: `${progress / 10}% 100%` }
 	}
 
 	const handleClickVolumeIcon = () => {
@@ -89,20 +80,32 @@ const VideoPlayer = () => {
 				}, 200)
 			} else if (event.key === 'ArrowUp') {
 				event.preventDefault()
-				videoRef.current.volume += 0.1
-				setVolume(prev => prev + 10)
+				const newVolume = videoRef.current.volume + 0.1
+				if (newVolume <= 1) {
+					videoRef.current.volume = newVolume
+					setVolume(prev => prev + 10)
+				} else {
+					videoRef.current.volume = 1
+					setVolume(prev => 100)
+				}
 				setIsClickedUpOrDownArrow(true)
 				setTimeout(() => {
 					setIsClickedUpOrDownArrow(false)
-				}, 200)
+				}, 100)
 			} else if (event.key === 'ArrowDown') {
 				event.preventDefault()
-				videoRef.current.volume -= 0.1
-				setVolume(prev => prev - 10)
+				const newVolume = videoRef.current.volume - 0.1
+				if (newVolume >= 0) {
+					videoRef.current.volume = newVolume
+					setVolume(prev => prev - 10)
+				} else {
+					videoRef.current.volume = 0
+					setVolume(0)
+				}
 				setIsClickedUpOrDownArrow(true)
 				setTimeout(() => {
 					setIsClickedUpOrDownArrow(false)
-				}, 200)
+				}, 100)
 			} else if (event.key === ' ' || event.key === 'Enter') {
 				event.preventDefault()
 				if (isPaused) {
@@ -113,28 +116,23 @@ const VideoPlayer = () => {
 					setIsPaused(true)
 				}
 			} else if (event.key === 'f') {
-				if (document.fullscreenElement) document.exitFullscreen()
-				else videoRef.current.requestFullscreen()
+				if (document.fullscreenElement) {
+					document.exitFullscreen()
+				} else {
+					videoRef.current.requestFullscreen()
+				}
 			}
 		}
 	}
 
-	// Переносим данные из redux-state в videoRef
-	useEffect(() => {
-		setTimeout(() => {
-			if (videoRef.current) {
-				videoRef.current.currentTime =
-					(duration / 1000) * videoRef.current.duration
-				setIsLoadedDuration(true)
-			}
-		}, 100)
-	}, [isLoadedMetadata])
-
 	//Обрабатываем двойной клик
 	useEffect(() => {
 		if (videoRef.current && videoClicked > 1) {
-			if (document.fullscreenElement) document.exitFullscreen()
-			else videoRef.current.requestFullscreen()
+			if (document.fullscreenElement) {
+				document.exitFullscreen()
+			} else {
+				videoRef.current.requestFullscreen()
+			}
 		}
 
 		setTimeout(() => {
@@ -148,142 +146,126 @@ const VideoPlayer = () => {
 	}
 
 	return (
-		<>
-			{/* {!videoRef.current ? (
-				<Loader />
-			) : ( */}
-			<div className='relative w-full'>
-				{isClickedUpOrDownArrow && (
-					<div className={cl.volume__notif}>
-						<BsFillVolumeUpFill size={70} />
-						<p className='text-[40px]'>{volume}%</p>
+		<div className='relative w-full'>
+			{isClickedUpOrDownArrow && (
+				<div className={cl.volume__notif}>
+					<BsFillVolumeUpFill size={70} />
+					<p className='text-[40px]'>{volume}%</p>
+				</div>
+			)}
+			{isClickedLeftArrow && (
+				<div className={`${cl.rewind} ${cl.rewind__left}`}>
+					<HiRewind size={90} />
+					<p>10 сек</p>
+				</div>
+			)}
+			{isClickedRightArrow && (
+				<div className={`${cl.rewind} ${cl.rewind__right}`}>
+					<HiRewind size={90} className='rotate-180' />
+					<p>10 сек</p>
+				</div>
+			)}
+			{!isPaused ? (
+				<FaPlay className={cl.play} />
+			) : (
+				<IoMdPause className={cl.play} />
+			)}
+			<video
+				id='video'
+				onKeyDown={event => handleKeyDown(event)}
+				ref={videoRef}
+				src={videoData?.video_path}
+				className={cl.player}
+				onTimeUpdate={event =>
+					setProgress(
+						(Math.ceil(event.currentTarget.currentTime) * 1000) /
+							event.currentTarget.duration
+					)
+				}
+				onClick={handleClickVideo}
+			></video>
+			<div className={cl.panel} onClick={handleClickVideo}>
+				<div className='relative' onClick={event => event.stopPropagation()}>
+					<div className={cl.progress__container}>
+						<input
+							type='range'
+							min={0}
+							max={1000}
+							className={cl.progress}
+							style={getBackgroundSizeProgress()}
+							value={progress}
+							onChange={event => {
+								if (videoRef.current)
+									videoRef.current.currentTime =
+										(parseInt(event.target.value) / 1000) *
+										videoRef.current.duration
+								setProgress(parseInt(event.target.value))
+							}}
+						/>
 					</div>
-				)}
-				{isClickedLeftArrow && (
-					<div className={`${cl.rewind} ${cl.rewind__left}`}>
-						<HiRewind size={90} />
-						<p>10 сек</p>
-					</div>
-				)}
-				{isClickedRightArrow && (
-					<div className={`${cl.rewind} ${cl.rewind__right}`}>
-						<HiRewind size={90} className='rotate-180' />
-						<p>10 сек</p>
-					</div>
-				)}
-				{!isPaused ? (
-					<FaPlay className={cl.play} />
-				) : (
-					<IoMdPause className={cl.play} />
-				)}
-				<video
-					onLoadedMetadata={() => setIsLoadedMetadata(true)}
-					onLoadedDataCapture={() => {
-						if (videoRef.current)
-							videoRef.current.setAttribute(
-								'poster',
-								'https://ak.picdn.net/shutterstock/videos/19981957/thumb/1.jpg?ip=x480'
-							)
-					}}
-					id='video'
-					onKeyDown={event => handleKeyDown(event)}
-					ref={videoRef}
-					src={videoData?.video_path}
-					className={cl.player}
-					onTimeUpdate={event =>
-						setDuration(
-							(Math.ceil(event.currentTarget.currentTime) * 1000) /
-								event.currentTarget.duration
-						)
-					}
-					onClick={handleClickVideo}
-				></video>
-				<div className={cl.panel}>
-					<div className='relative'>
-						<div className={cl.progress__container}>
-							<input
-								type='range'
-								min={0}
-								max={1000}
-								className={cl.progress}
-								style={getBackgroundSizeProgress()}
-								value={duration}
-								onChange={event => {
-									if (videoRef.current)
-										videoRef.current.currentTime =
-											(parseInt(event.target.value) / 1000) *
-											videoRef.current.duration
-									setDuration(parseInt(event.target.value))
-								}}
-							/>
-						</div>
-						<div className={cl.controls}>
-							<div>
-								<div className='flex items-center'>
-									<div onClick={handleTogglePlay}>
-										{isPaused || duration >= 1000 ? (
-											<FaPlay size={17} className='cursor-pointer mr-6' />
-										) : (
-											<IoMdPause size={23} className='cursor-pointer mr-6' />
-										)}
-									</div>
-									<div className={cl.volume__container}>
-										{volume > 0 ? (
-											<BsFillVolumeUpFill
-												size={33}
-												className='cursor-pointer pr-3'
-												onClick={handleClickVolumeIcon}
-											/>
-										) : (
-											<BsFillVolumeMuteFill
-												size={33}
-												className='cursor-pointer pr-3 opacity-60'
-												onClick={handleClickMuteIcon}
-											/>
-										)}
+					<div className={cl.controls}>
+						<div>
+							<div className='flex items-center'>
+								<div onClick={handleTogglePlay}>
+									{isPaused || progress >= 1000 ? (
+										<FaPlay size={17} className='cursor-pointer mr-6' />
+									) : (
+										<IoMdPause size={23} className='cursor-pointer mr-6' />
+									)}
+								</div>
+								<div className={cl.volume__container}>
+									{volume > 0 ? (
+										<BsFillVolumeUpFill
+											size={33}
+											className='cursor-pointer pr-3'
+											onClick={handleClickVolumeIcon}
+										/>
+									) : (
+										<BsFillVolumeMuteFill
+											size={33}
+											className='cursor-pointer pr-3 opacity-60'
+											onClick={handleClickMuteIcon}
+										/>
+									)}
 
-										<div className={cl.volume__body}>
-											<input
-												type='range'
-												min={0}
-												max={100}
-												className={cl.volume}
-												value={volume}
-												onChange={event => {
-													setVolume(parseInt(event.target.value))
-													if (videoRef.current)
-														videoRef.current.volume =
-															parseInt(event.target.value) / 100
-												}}
-												style={getBackgroundSizeVolume()}
-											/>
-										</div>
-									</div>
-									<div>
-										{isLoadedDuration && (
-											<p>
-												{timeFormat(videoRef.current?.currentTime || 0)}/
-												{timeFormat(videoRef.current?.duration || 0)}
-											</p>
-										)}
+									<div className={cl.volume__body}>
+										<input
+											type='range'
+											min={0}
+											max={100}
+											className={cl.volume}
+											value={volume}
+											onChange={event => {
+												setVolume(parseInt(event.target.value))
+												if (videoRef.current)
+													videoRef.current.volume =
+														parseInt(event.target.value) / 100
+											}}
+											style={getBackgroundSizeVolume()}
+										/>
 									</div>
 								</div>
+								<div>
+									<p>
+										{timeFormat(videoRef.current?.currentTime || 0)}/
+										{timeFormat(videoRef.current?.duration || 0)}
+									</p>
+								</div>
 							</div>
+						</div>
 
-							<div className='flex items-center gap-4'>
-								<IoMdSettings size={23} className='cursor-pointer' />
-								<BiFullscreen
-									size={23}
-									onClick={handleClickFullScreen}
-									className='cursor-pointer'
-								/>
-							</div>
+						<div className='flex items-center gap-4'>
+							<IoMdSettings size={23} className='cursor-pointer' />
+							<BiFullscreen
+								size={23}
+								onClick={handleClickFullScreen}
+								className='cursor-pointer'
+							/>
 						</div>
 					</div>
 				</div>
 			</div>
-			{/* )} */}
-		</>
+		</div>
 	)
 }
 
