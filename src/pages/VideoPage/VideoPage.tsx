@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import cl from './VideoPage.module.scss'
 import { IoHeartSharp } from 'react-icons/io5'
 import { IoHeartDislikeSharp } from 'react-icons/io5'
@@ -28,6 +28,7 @@ import VideoPlayer from '../../components/VideoPlayer/VideoPlayer'
 import { toast } from 'react-toastify'
 import { toastConfig } from '../../config/toast.config'
 import { countCommentFormat } from '../../utils/countComment.format'
+import { viewsFormat } from '../../utils/views.format'
 
 const VideoPage = () => {
 	const [subscribe] = useSubscribeMutation()
@@ -125,7 +126,7 @@ const VideoPage = () => {
 								<div className='flex justify-between'>
 									<div className='flex items-center gap-2 text-zinc-400'>
 										<p>{numberFormat(videoData?.views || 0)}</p>
-										<p>просмотров</p>
+										<p>{viewsFormat(videoData?.views || 0)}</p>
 										<div className='w-[5px] h-[5px] bg-zinc-400 rounded-full'></div>
 										<p>{dateFormat(videoData?.created_at.toString() || '')}</p>
 									</div>
@@ -176,11 +177,13 @@ const VideoPage = () => {
 								<div className='flex justify-between'>
 									<div className='flex items-center gap-2'>
 										{videoData?.user.avatar_path ? (
-											<img
-												src={videoData.user.avatar_path}
-												alt=''
-												className='rounded-full w-[55px] h-[55px] object-cover'
-											/>
+											<Link to={`/user/${videoData.user.username}`}>
+												<img
+													src={videoData.user.avatar_path}
+													alt=''
+													className='border-4 border-dashed border-transparent rounded-full w-[65px] h-[65px] object-cover hover:border-blue-400  hover:scale-110 duration-300 cursor-pointer'
+												/>
+											</Link>
 										) : (
 											<FaUserAlt
 												className='border-2 rounded-full p-1'
@@ -198,7 +201,7 @@ const VideoPage = () => {
 
 									{user.token ? (
 										user.id !== videoData?.user.id ? (
-											videoData?.user.is_subscribed ? (
+											!videoData?.user.is_subscribed ? (
 												<SubscribeButton
 													onClick={() =>
 														subscribe({

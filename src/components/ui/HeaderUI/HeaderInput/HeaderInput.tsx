@@ -18,13 +18,13 @@ const HedaerInput: FC<React.HTMLProps<HTMLInputElement>> = props => {
 
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === 'Enter') {
-			navigate('/')
+			if (!searchParams.get('search')) navigate('/')
 			setSearch(value)
 		}
 	}
 
 	const handleClickSearch = () => {
-		navigate('/')
+		if (!searchParams.get('search')) navigate('/')
 		setSearch(value)
 	}
 

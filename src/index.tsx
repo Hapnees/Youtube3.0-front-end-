@@ -16,16 +16,16 @@ import Loader from './components/ui/LoaderUI/Loader'
 TODO:
 	[X] - Subscription-system
 	[ ] - Fullscreen mode in VidePlayer
-	[ ] - ProfilePage
-	[ ] - Video delete-protection
+	[X] - ProfilePage
+	[X] - Video delete-protection
 */
 
 /*
 FIXME: 
 	[X] - Negative volume (when press arrowDown)
-	[ ] - Correct duration
+	[X] - Correct duration
 	[X] - Sticky MainMenu
-	[ ] - Correct date-age-format
+	[ ] - Correct date-ago-format
 */
 
 const persistor = persistStore(store)

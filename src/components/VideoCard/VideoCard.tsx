@@ -5,19 +5,23 @@ import cl from './VideoCard.module.scss'
 import { numberFormat } from '../../utils/number.format'
 import { Link, useNavigate } from 'react-router-dom'
 import { IVideoGetVideoCard } from '../../models/video/video-get-VideoCardinterface'
+import { useUpdateViewsMutation } from '../../api/user.api'
+import { viewsFormat } from '../../utils/views.format'
 
 interface IVideoCard {
 	video: IVideoGetVideoCard
 }
 
 const VideoCard: FC<IVideoCard> = ({ video }) => {
+	const [updateViews] = useUpdateViewsMutation()
 	const navigate = useNavigate()
 	const handleClickAvatar = (event: any) => {
 		event.preventDefault()
+		event.stopPropagation()
 		navigate(`/user/${video.user.username}`)
 	}
 	return (
-		<Link to={`video/${video.id}`}>
+		<Link to={`video/${video.id}`} onClick={() => updateViews(video.id)}>
 			<div className={cl.container}>
 				<div className={cl.thumbnail__container}>
 					<img
@@ -47,7 +51,7 @@ const VideoCard: FC<IVideoCard> = ({ video }) => {
 									<p className='max-w-[40px] overflow-hidden text-ellipsis'>
 										{numberFormat(video.views)}
 									</p>
-									<p>просмотров</p>
+									<p>{viewsFormat(video.views)}</p>
 								</div>
 								<p>{dateAgoFormat(video.created_at)}</p>
 							</div>

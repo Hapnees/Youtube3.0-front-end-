@@ -3,6 +3,7 @@ import { AiFillHome, AiFillLike, AiOutlineHistory } from 'react-icons/ai'
 import { FiTrendingUp } from 'react-icons/fi'
 import { MdSubscriptions } from 'react-icons/md'
 import { TbPlaylist } from 'react-icons/tb'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useActions } from '../../../hooks/useActions'
 import { useTypedSelector } from '../../../hooks/useTypedSelector'
@@ -11,6 +12,16 @@ import cl from './MainMenuCategories.module.scss'
 const MainMenuCategories = () => {
 	const { category } = useTypedSelector(state => state.mainMenuCategories)
 	const { setChecks } = useActions()
+	const navigate = useNavigate()
+	const location = useLocation()
+
+	const handleClickGeneral = () => {
+		navigate('/')
+	}
+
+	const handleClickTrends = () => {
+		navigate('/')
+	}
 
 	return (
 		<>
@@ -21,10 +32,10 @@ const MainMenuCategories = () => {
 					name='category'
 					id='general'
 					value='general'
-					checked={category === 'general'}
+					checked={category === 'general' && location.pathname === '/'}
 					onChange={() => setChecks('general')}
 				/>
-				<label htmlFor='general'>
+				<label htmlFor='general' onClick={handleClickGeneral}>
 					<AiFillHome className={cl.icon} />
 					<p>Главная</p>
 				</label>
@@ -52,7 +63,7 @@ const MainMenuCategories = () => {
 				/>
 				<label htmlFor='history'>
 					<AiOutlineHistory className={cl.icon} />
-					<p>Тренды</p>
+					<p>История</p>
 				</label>
 			</div>
 

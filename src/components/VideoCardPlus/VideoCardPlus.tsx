@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import testAvatar from '../../assets/img/profile.png'
-import cl from './VideoCard.module.scss'
+import cl from './VideoCardPlus.module.scss'
 import { IVideoGet } from '../../models/video/video-get.interface'
 import { dateAgoFormat } from '../../utils/dateAgo.format'
 import { IUserGet } from '../../models/user/user-get.interface'
@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import { toastConfig } from '../../config/toast.config'
 import { Link, useNavigate } from 'react-router-dom'
 import { IVideoGetVideoCardPlus } from '../../models/video/vide-get-VideoCardPlus'
+import Confirm from '../ui/ConfirmUI/Confirm'
 
 interface IVideoCardPlus {
 	video: IVideoGetVideoCardPlus
@@ -27,7 +28,7 @@ const VideoCardPlus: FC<IVideoCardPlus> = ({ video }) => {
 	const [isOpenMenu, setIsOpenMenu] = useState(false)
 	const { setIsOpenModalWindow } = useActions()
 
-	const [deletVideo] = useDeleteVideoMutation()
+	const [deleteVideo] = useDeleteVideoMutation()
 
 	const handleClickEdit = (event: any) => {
 		event.preventDefault()
@@ -36,9 +37,16 @@ const VideoCardPlus: FC<IVideoCardPlus> = ({ video }) => {
 
 	const handleClickDelete = async (event: any) => {
 		event.preventDefault()
-		deletVideo({ id: video.id, token: user.token || '' })
-			.unwrap()
-			.then(data => toast.success(data.message, toastConfig))
+		const timer = setTimeout(() => {
+			deleteVideo({ id: video.id, token: user.token || '' })
+				.unwrap()
+				.then(data => toast.success(data.message, toastConfig))
+		}, 5700)
+		toast.info(`Видео ${video.title} будет удалено. Кликните для отмены`, {
+			autoClose: 5000,
+			onClick: () => clearTimeout(timer),
+			pauseOnHover: false,
+		})
 	}
 
 	return (

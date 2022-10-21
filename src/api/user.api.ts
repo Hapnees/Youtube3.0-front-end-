@@ -12,11 +12,38 @@ import { IVideoGetVideoCardPlus } from '../models/video/vide-get-VideoCardPlus'
 
 export const userApi = createApi({
 	reducerPath: 'userApi',
-	tagTypes: ['User', 'Video', 'Comment', 'ProfileVideos'],
+	tagTypes: ['User', 'Video', 'Comment', 'ProfileVideos', 'Subscriptions'],
 	baseQuery: fetchBaseQuery({
 		baseUrl: 'http://localhost:4000/api/',
 	}),
 	endpoints: build => ({
+		searchUsers: build.query<
+			{
+				username: string
+				avatar_path: string
+				subscribers_count: number
+				description: string
+			}[],
+			string
+		>({
+			query: username => ({
+				url: 'user/search',
+				params: { username },
+			}),
+		}),
+
+		getSubscriptions: build.query<
+			{ username: string; avatar_path: string }[],
+			{ token: string; limit?: number }
+		>({
+			query: ({ token, limit }) => ({
+				url: 'user/subscriptions',
+				headers: { Authorization: `Bearer ${token}` },
+				params: { limit },
+			}),
+			providesTags: ['Subscriptions'],
+		}),
+
 		getProfile: build.query<IUserGet, string>({
 			query: token => ({
 				url: 'user/profile',
@@ -25,7 +52,21 @@ export const userApi = createApi({
 			providesTags: ['User'],
 		}),
 
-		getProfileByUsername: build.query<IUserGetByUsername, string>({
+		getProfileByUsernameAuth: build.query<
+			IUserGetByUsername,
+			{ username: string; token: string }
+		>({
+			query: ({ username, token }) => ({
+				url: `user/auth/${username}`,
+				headers: { Authorization: `Bearer ${token}` },
+			}),
+			providesTags: ['User'],
+		}),
+
+		getProfileByUsername: build.query<
+			Omit<IUserGetByUsername, 'is_subscribed'>,
+			string
+		>({
 			query: username => ({
 				url: `user/${username}`,
 			}),
@@ -52,6 +93,13 @@ export const userApi = createApi({
 			invalidatesTags: result => [{ type: 'User', username: result?.username }],
 		}),
 
+		getProfileVideosByUsername: build.query<IVideoGetVideoCardPlus[], string>({
+			query: username => ({
+				url: `video/profile/${username}`,
+			}),
+			providesTags: ['ProfileVideos'],
+		}),
+
 		getProfileVideos: build.query<IVideoGetVideoCardPlus[], string>({
 			query: token => ({
 				url: 'video/profile',
@@ -70,7 +118,7 @@ export const userApi = createApi({
 				headers: { Authorization: `Bearer ${token}` },
 				body: file,
 			}),
-			invalidatesTags: result => [{ type: 'User', username: result?.username }],
+			invalidatesTags: ['ProfileVideos'],
 		}),
 
 		updateVideo: build.mutation<
@@ -83,7 +131,7 @@ export const userApi = createApi({
 				headers: { Authorization: `Bearer ${token}` },
 				body: file,
 			}),
-			invalidatesTags: result => [{ type: 'User', username: result?.username }],
+			invalidatesTags: ['ProfileVideos'],
 		}),
 
 		deleteVideo: build.mutation<
@@ -99,6 +147,16 @@ export const userApi = createApi({
 			invalidatesTags: ['ProfileVideos'],
 		}),
 
+		getVideosTrends: build.query<
+			{ videos: IVideoGetVideoCard[]; total_pages: number },
+			{ limit: number; page: number }
+		>({
+			query: ({ limit, page }) => ({
+				url: 'video/trends',
+				params: { limit, page },
+			}),
+		}),
+
 		getVideoById: build.query<
 			IVideoGetVideoPage,
 			{ id: number; idFrom?: number }
@@ -110,11 +168,20 @@ export const userApi = createApi({
 			providesTags: ['Video'],
 		}),
 
-		getVideos: build.query<IVideoGetVideoCard[], void>({
-			query: () => 'video',
+		getVideos: build.query<
+			{ videos: IVideoGetVideoCard[]; total_pages: number },
+			{ limit?: number; page?: number }
+		>({
+			query: ({ limit = 12, page = 1 }) => ({
+				url: 'video',
+				params: { limit, page },
+			}),
 		}),
 
-		searchVideos: build.query<IVideoGetVideoCard[], string>({
+		searchVideos: build.query<
+			{ videos: IVideoGetVideoCard[]; total_pages: number },
+			string
+		>({
 			query: search => ({
 				url: 'video/search',
 				params: { search },
@@ -146,6 +213,15 @@ export const userApi = createApi({
 				body: { id },
 			}),
 
+			invalidatesTags: ['Video'],
+		}),
+
+		updateViews: build.mutation<{ message: string }, number>({
+			query: videoId => ({
+				url: 'video/views',
+				method: 'PATCH',
+				body: { videoId },
+			}),
 			invalidatesTags: ['Video'],
 		}),
 
@@ -208,7 +284,7 @@ export const userApi = createApi({
 				headers: { Authorization: `Bearer ${token}` },
 				body: { userId },
 			}),
-			invalidatesTags: ['Video'],
+			invalidatesTags: ['Video', 'User', 'Subscriptions'],
 		}),
 	}),
 })
@@ -216,7 +292,7 @@ export const userApi = createApi({
 export const {
 	useGetProfileQuery,
 	useUpdateProfileMutation,
-	useGetProfileByUsernameQuery,
+	useLazyGetProfileByUsernameAuthQuery,
 	useLazyGetProfileByIdQuery,
 	useGetProfileByIdQuery,
 	useAddVideoMutation,
@@ -234,4 +310,10 @@ export const {
 	useAddDislikeCommentMutation,
 	useSubscribeMutation,
 	useGetProfileVideosQuery,
+	useLazyGetProfileByUsernameQuery,
+	useGetProfileVideosByUsernameQuery,
+	useUpdateViewsMutation,
+	useLazyGetSubscriptionsQuery,
+	useLazyGetVideosTrendsQuery,
+	useLazySearchUsersQuery,
 } = userApi

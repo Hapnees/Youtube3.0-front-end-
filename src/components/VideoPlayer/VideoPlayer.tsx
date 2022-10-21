@@ -18,6 +18,7 @@ interface IState {
 const VideoPlayer: FC<IState> = ({ videoData }) => {
 	const [progress, setProgress] = useState(0)
 
+	const [isLoaded, setIsLoaded] = useState(false)
 	const [videoClicked, setVideoClicked] = useState(0)
 	const [tempVolume, setTempVolume] = useState(100)
 	const [isClickedRightArrow, setIsClickedRightArrow] = useState(false)
@@ -171,6 +172,9 @@ const VideoPlayer: FC<IState> = ({ videoData }) => {
 				<IoMdPause className={cl.play} />
 			)}
 			<video
+				onLoadedMetadata={() => {
+					if (videoRef.current) setIsLoaded(true)
+				}}
 				id='video'
 				onKeyDown={event => handleKeyDown(event)}
 				ref={videoRef}
@@ -246,10 +250,12 @@ const VideoPlayer: FC<IState> = ({ videoData }) => {
 									</div>
 								</div>
 								<div>
-									<p>
-										{timeFormat(videoRef.current?.currentTime || 0)}/
-										{timeFormat(videoRef.current?.duration || 0)}
-									</p>
+									{isLoaded && (
+										<p>
+											{timeFormat(videoRef.current?.currentTime || 0)}/
+											{timeFormat(videoRef.current?.duration || 0)}
+										</p>
+									)}
 								</div>
 							</div>
 						</div>

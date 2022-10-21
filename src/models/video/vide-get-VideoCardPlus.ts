@@ -1,5 +1,6 @@
 export interface IVideoGetVideoCardPlus {
 	id: number
+	user_id: number
 	title: string
 	duration: string
 	views: number

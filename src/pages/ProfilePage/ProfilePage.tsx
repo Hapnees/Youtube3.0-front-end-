@@ -9,7 +9,9 @@ import {
 } from '../../api/user.api'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
 import Loader from '../../components/ui/LoaderUI/Loader'
-import VideoGridPlus from '../../components/ui/VideoGridUI/VideoGridPlus'
+import VideoGridPlus from '../../components/ui/VideoGridUI/VideoGridPlus/VideoGridPlus'
+import { numberFormat } from '../../utils/number.format'
+import { subscribersFormat } from '../../utils/subscribers.format'
 
 const ProfilePage = () => {
 	const [radio, setRadio] = useState('video')
@@ -55,10 +57,23 @@ const ProfilePage = () => {
 													className='rounded-full w-[70px] h-[70px]'
 												/>
 												<div>
-													<p className='text-2xl mb-1'>
-														{profileData.username}
-													</p>
-													<p className='text-zinc-400'>31 тыс. подписчиков</p>
+													<div className='flex flex-col'>
+														<p className='text-2xl mb-1'>
+															{profileData.username}
+														</p>
+														<div className='flex gap-1 text-zinc-400'>
+															<p>
+																{numberFormat(
+																	profileData.subscribers_count || 0
+																)}
+															</p>
+															<p>
+																{subscribersFormat(
+																	profileData.subscribers_count || 0
+																)}
+															</p>
+														</div>
+													</div>
 												</div>
 											</div>
 

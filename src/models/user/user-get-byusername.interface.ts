@@ -1,5 +1,3 @@
-import { IVideoGetVideoCard } from '../video/video-get-VideoCardinterface'
-
 export interface IUserGetByUsername {
 	id: number
 	username: string
@@ -8,5 +6,5 @@ export interface IUserGetByUsername {
 	avatar_path: string
 	description: string
 	is_subscribed: boolean | null
-	video: IVideoGetVideoCard
+	subscribers_count: number
 }

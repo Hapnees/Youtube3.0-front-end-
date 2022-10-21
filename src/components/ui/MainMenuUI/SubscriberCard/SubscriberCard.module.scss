@@ -1,6 +1,6 @@
 @import '../../../../styles/variables.scss';
 
 .container {
-	@apply flex items-center gap-2;
+	@apply flex items-center gap-4 px-[2px] py-[4px] border border-transparent hover:bg-zinc-900 hover:border-zinc-800 rounded-md cursor-pointer duration-300;
 	color: $main_menu__text__color;
 }

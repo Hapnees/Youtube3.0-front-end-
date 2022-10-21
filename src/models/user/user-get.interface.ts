@@ -7,5 +7,6 @@ export interface IUserGet {
 	description: string
 	avatar_path: string
 	header_path: string
+	subscribers_count: number
 	// videos: IVideoGetVideoCardPlus[]
 }

@@ -39,5 +39,5 @@ export const timeFormat = (time: number) => {
 		}
 	}
 
-	return `${hour}:${min}${sec}`
+	return `${hour}:${min}:${sec}`
 }

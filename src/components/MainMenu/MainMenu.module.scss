@@ -6,5 +6,6 @@
 }
 
 .menu_subscribers {
-	@apply flex flex-col gap-6 my-6;
+	@apply flex flex-col gap-3 my-6;
+	width: 200px;
 }

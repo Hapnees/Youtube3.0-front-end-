@@ -1,18 +1,30 @@
-import React from 'react'
+import React, { FC } from 'react'
+import { Link } from 'react-router-dom'
 import profileIcon from '../../../../assets/img/profile.png'
 import cl from './SubscriberCard.module.scss'
 
-const SubscriberCard = () => {
+interface ISubscriberCard {
+	sub: {
+		username: string
+		avatar_path: string
+	}
+}
+
+const SubscriberCard: FC<ISubscriberCard> = ({
+	sub: { username, avatar_path },
+}) => {
 	return (
-		<li className={cl.container}>
-			<img
-				src={profileIcon}
-				alt='profile__icon'
-				width={30}
-				className='rounded-full'
-			/>
-			<p>Влад Бумага</p>
-		</li>
+		<Link to={`/user/${username}`}>
+			<li className={cl.container}>
+				<img
+					src={avatar_path || profileIcon}
+					alt='profile__icon'
+					width={35}
+					className='rounded-full'
+				/>
+				<p>{username}</p>
+			</li>
+		</Link>
 	)
 }
 
