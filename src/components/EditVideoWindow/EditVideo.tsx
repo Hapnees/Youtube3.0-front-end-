@@ -63,7 +63,7 @@ const EditVideoWindow: FC<IAddVideoDetailsProps> = ({ video }) => {
 	// Заносим имя загруженного видео в title + определяем длительность видео
 	useEffect(() => {
 		setValue('title', video.title)
-		setValue('isPrivate', video.isPrivate)
+		setValue('isPrivate', video.is_private)
 		setValue('description', video.description)
 	}, [])
 

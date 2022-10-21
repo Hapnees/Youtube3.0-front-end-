@@ -24,6 +24,7 @@ const MainMenu = () => {
 					<p className='uppercase text-[#3c3c3c] tracking-wider'>Подписки</p>
 					<ul className={cl.menu_subscribers}>
 						{subscriptions &&
+							user.token &&
 							subscriptions.map(sub => (
 								<SubscriberCard key={sub.username} sub={sub} />
 							))}

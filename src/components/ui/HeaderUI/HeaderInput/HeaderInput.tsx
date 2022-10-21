@@ -6,6 +6,7 @@ import { useActions } from '../../../../hooks/useActions'
 import { useTypedSelector } from '../../../../hooks/useTypedSelector'
 
 const HedaerInput: FC<React.HTMLProps<HTMLInputElement>> = props => {
+	const { setCategory } = useActions()
 	const { setSearch } = useActions()
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
@@ -18,14 +19,18 @@ const HedaerInput: FC<React.HTMLProps<HTMLInputElement>> = props => {
 
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === 'Enter') {
-			if (!searchParams.get('search')) navigate('/')
+			if (!searchParams.get('search')) {
+				navigate('/')
+			}
 			setSearch(value)
+			setCategory('search')
 		}
 	}
 
 	const handleClickSearch = () => {
 		if (!searchParams.get('search')) navigate('/')
 		setSearch(value)
+		setCategory('search')
 	}
 
 	return (

@@ -14,8 +14,8 @@ export interface IVideoGetVideoPage {
 		id: number
 		username: string
 		avatar_path: string
-		is_liked: boolean | null
-		is_disliked: boolean | null
-		is_subscribed: boolean | null
 	}
+	is_liked: boolean
+	is_disliked: boolean
+	is_subscribed: boolean
 }
