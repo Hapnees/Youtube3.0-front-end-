@@ -19,8 +19,7 @@ const SubscriberCard: FC<ISubscriberCard> = ({
 				<img
 					src={avatar_path || profileIcon}
 					alt='profile__icon'
-					width={35}
-					className='rounded-full'
+					className='rounded-full w-[35px] h-[35px]'
 				/>
 				<p>{username}</p>
 			</li>

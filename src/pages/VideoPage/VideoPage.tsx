@@ -134,7 +134,7 @@ const VideoPage = () => {
 									<div className='flex gap-2'>
 										<div
 											className={
-												!videoData?.user.is_liked
+												!videoData?.is_liked
 													? `${cl.button} ${cl.button__like}`
 													: `${cl.button} ${cl.button__like__active}`
 											}
@@ -150,7 +150,7 @@ const VideoPage = () => {
 										</div>
 										<div
 											className={
-												!videoData?.user.is_disliked
+												!videoData?.is_disliked
 													? `${cl.button} ${cl.button__dislike}`
 													: `${cl.button} ${cl.button__dislike__active}`
 											}
@@ -201,7 +201,7 @@ const VideoPage = () => {
 
 									{user.token ? (
 										user.id !== videoData?.user.id ? (
-											!videoData?.user.is_subscribed ? (
+											!videoData?.is_subscribed ? (
 												<SubscribeButton
 													onClick={() =>
 														subscribe({

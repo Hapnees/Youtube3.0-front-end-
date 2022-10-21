@@ -147,16 +147,6 @@ export const userApi = createApi({
 			invalidatesTags: ['ProfileVideos'],
 		}),
 
-		getVideosTrends: build.query<
-			{ videos: IVideoGetVideoCard[]; total_pages: number },
-			{ limit: number; page: number }
-		>({
-			query: ({ limit, page }) => ({
-				url: 'video/trends',
-				params: { limit, page },
-			}),
-		}),
-
 		getVideoById: build.query<
 			IVideoGetVideoPage,
 			{ id: number; idFrom?: number }
@@ -170,21 +160,22 @@ export const userApi = createApi({
 
 		getVideos: build.query<
 			{ videos: IVideoGetVideoCard[]; total_pages: number },
-			{ limit?: number; page?: number }
+			{ limit?: number; page?: number; search?: string; category?: string }
 		>({
-			query: ({ limit = 12, page = 1 }) => ({
+			query: ({ limit = 12, page = 1, search, category }) => ({
 				url: 'video',
-				params: { limit, page },
+				params: { limit, page, search, category },
 			}),
 		}),
 
-		searchVideos: build.query<
+		getLikeVideos: build.query<
 			{ videos: IVideoGetVideoCard[]; total_pages: number },
-			string
+			{ token: string; limit?: number; page?: number }
 		>({
-			query: search => ({
-				url: 'video/search',
-				params: { search },
+			query: ({ token, limit, page }) => ({
+				url: 'video/liked',
+				headers: { Authorization: `Bearer ${token}` },
+				params: { limit, page },
 			}),
 		}),
 
@@ -300,8 +291,6 @@ export const {
 	useLazyGetVideosQuery,
 	useUpdateVideoMutation,
 	useDeleteVideoMutation,
-	useLazySearchVideosQuery,
-	useSearchVideosQuery,
 	useAddCommentMutation,
 	useGetCommentsQuery,
 	useAddLikeVideoMutation,
@@ -314,6 +303,6 @@ export const {
 	useGetProfileVideosByUsernameQuery,
 	useUpdateViewsMutation,
 	useLazyGetSubscriptionsQuery,
-	useLazyGetVideosTrendsQuery,
 	useLazySearchUsersQuery,
+	useLazyGetLikeVideosQuery,
 } = userApi

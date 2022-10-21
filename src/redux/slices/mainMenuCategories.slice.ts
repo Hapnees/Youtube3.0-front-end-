@@ -10,7 +10,7 @@ export const mainMenuCategoriesSlice = createSlice({
 	name: 'mainMenuCategories',
 	initialState,
 	reducers: {
-		setChecks: (state, action: PayloadAction<string>) => {
+		setCategory: (state, action: PayloadAction<string>) => {
 			state.category = action.payload
 		},
 	},

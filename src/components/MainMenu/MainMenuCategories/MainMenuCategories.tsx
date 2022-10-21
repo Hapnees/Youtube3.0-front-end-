@@ -11,17 +11,9 @@ import cl from './MainMenuCategories.module.scss'
 
 const MainMenuCategories = () => {
 	const { category } = useTypedSelector(state => state.mainMenuCategories)
-	const { setChecks } = useActions()
+	const { setCategory: setChecks } = useActions()
 	const navigate = useNavigate()
 	const location = useLocation()
-
-	const handleClickGeneral = () => {
-		navigate('/')
-	}
-
-	const handleClickTrends = () => {
-		navigate('/')
-	}
 
 	return (
 		<>
@@ -35,7 +27,7 @@ const MainMenuCategories = () => {
 					checked={category === 'general' && location.pathname === '/'}
 					onChange={() => setChecks('general')}
 				/>
-				<label htmlFor='general' onClick={handleClickGeneral}>
+				<label htmlFor='general' onClick={() => navigate('/')}>
 					<AiFillHome className={cl.icon} />
 					<p>Главная</p>
 				</label>
@@ -45,10 +37,10 @@ const MainMenuCategories = () => {
 					name='category'
 					id='trends'
 					value='trends'
-					checked={category === 'trends'}
+					checked={category === 'trends' && location.pathname === '/'}
 					onChange={() => setChecks('trends')}
 				/>
-				<label htmlFor='trends'>
+				<label htmlFor='trends' onClick={() => navigate('/')}>
 					<FiTrendingUp className={cl.icon} />
 					<p>Тренды</p>
 				</label>
@@ -58,10 +50,10 @@ const MainMenuCategories = () => {
 					name='category'
 					id='history'
 					value='history'
-					checked={category === 'history'}
+					checked={category === 'history' && location.pathname === '/'}
 					onChange={() => setChecks('history')}
 				/>
-				<label htmlFor='history'>
+				<label htmlFor='history' onClick={() => navigate('/')}>
 					<AiOutlineHistory className={cl.icon} />
 					<p>История</p>
 				</label>
@@ -73,10 +65,10 @@ const MainMenuCategories = () => {
 					name='category'
 					id='liked'
 					value='liked'
-					checked={category === 'liked'}
+					checked={category === 'liked' && location.pathname === '/'}
 					onChange={() => setChecks('liked')}
 				/>
-				<label htmlFor='liked'>
+				<label htmlFor='liked' onClick={() => navigate('/')}>
 					<AiFillLike className={cl.icon} />
 					<p>Понравившиеся</p>
 				</label>
@@ -86,10 +78,10 @@ const MainMenuCategories = () => {
 					name='category'
 					id='subscrip'
 					value='subscrip'
-					checked={category === 'subscrip'}
+					checked={category === 'subscrip' && location.pathname === '/'}
 					onChange={() => setChecks('subscrip')}
 				/>
-				<label htmlFor='subscrip'>
+				<label htmlFor='subscrip' onClick={() => navigate('/')}>
 					<MdSubscriptions className={cl.icon} />
 					<p>Подписки</p>
 				</label>

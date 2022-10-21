@@ -7,7 +7,7 @@ export interface IVideoGet {
 	views: number
 	likes: number
 	dislikes: number
-	isPrivate: boolean
+	is_private: boolean
 	thumbnailPath: string
 	videoPath: string
 	user_id: number
