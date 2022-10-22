@@ -9,7 +9,7 @@
 			@apply text-white;
 
 			> .icon {
-				@apply bg-[#c93d3d];
+				background-color: #c93d3d;
 			}
 		}
 	}
@@ -26,12 +26,17 @@
 
 	&:after {
 		content: '';
-		@apply block bg-[#1e1e1e] h-[2px] w-[90%] mt-1;
+		@apply block mt-1;
+		background-color: #1e1e1e;
+		height: 2px;
+		width: 90%;
 	}
 }
 
 .icon {
-	@apply p-[6px] bg-[#242424] text-lg rounded-xl;
+	@apply text-lg rounded-xl;
+	background-color: #242424;
+	padding: 6px;
 	width: 36px;
 	height: 36px;
 }

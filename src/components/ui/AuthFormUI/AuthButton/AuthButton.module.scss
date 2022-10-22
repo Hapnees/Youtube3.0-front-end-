@@ -1,9 +1,15 @@
 .base {
-	@apply w-[150px] border border-transparent font-semibold text-lg py-[2px] mx-auto rounded-md duration-300;
+	@apply border border-transparent font-semibold text-lg mx-auto rounded-md duration-300;
+	width: 150px;
+	padding: 2px 0;
 }
 
 .special {
-	@apply bg-[#bc2626] hover:bg-[#9c1f1f];
+	background-color: #bc2626;
+
+	&:hover {
+		background-color: #9c1f1f;
+	}
 }
 
 .non_special {
