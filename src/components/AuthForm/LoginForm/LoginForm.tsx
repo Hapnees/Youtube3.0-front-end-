@@ -35,7 +35,7 @@ const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
 		setIsClickedRegister(true)
 	}
 
-	const onSubmit: SubmitHandler<ILoginFields> = data => {
+	const onSubmit: SubmitHandler<ILoginFields> = (data: any) => {
 		loginUser(data)
 		if (loginData) setAuthUser(loginData)
 	}
@@ -67,6 +67,7 @@ const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
 							>
 								<div className='flex flex-col gap-2'>
 									<AuthInput
+										type='email'
 										placeholder='Почта'
 										{...register('email', {
 											required: 'Обязательное поле',
@@ -78,7 +79,6 @@ const LoginForm: FC<ILoginForm> = ({ setIsClickedLoginButton }) => {
 										})}
 										error={errors.email}
 										autoFocus
-										autoComplete='off'
 									/>
 									<AuthInput
 										placeholder='Пароль'

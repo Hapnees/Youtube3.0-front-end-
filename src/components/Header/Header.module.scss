@@ -1,21 +1,41 @@
 @import '../../styles/variables.scss';
 
 .wrapper {
-	@apply sticky top-0;
-	box-shadow: 0 0 15px rgb(74, 70, 70);
-	background-color: $main_bg_color;
-	z-index: 1000;
+  @apply sticky top-0;
+  box-shadow: 0 0 15px rgb(74, 70, 70);
+  background-color: $main_bg_color;
+  z-index: 1000;
 }
 
 .container {
-	@apply flex items-center;
-	padding: 5px $main__spaceX;
+  @apply flex items-center;
+  padding: 5px $main__spaceX;
+
+  @media (max-width: 1100px) {
+    padding: 5px 20px;
+  }
 }
 
 .section__1 {
-	width: 350px;
+  width: 350px;
+
+  @media (max-width: 1100px) {
+    display: none;
+  }
+}
+
+.container__input {
+  width: 600px;
+
+  @media (max-width: 790px){
+    width: 500px;
+  }
+
+  @media (max-width: 680px){
+    width: 400px;
+  }
 }
 
 .section__2 {
-	@apply flex justify-between items-center w-full;
+  @apply flex justify-between items-center w-full;
 }

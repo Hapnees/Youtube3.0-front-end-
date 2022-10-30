@@ -1,66 +1,59 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { authApi } from '../api/auth.api'
 import storage from 'redux-persist/lib/storage'
 import persistReducer from 'redux-persist/es/persistReducer'
 import {
-	FLUSH,
-	REHYDRATE,
-	PAUSE,
-	PERSIST,
-	PURGE,
-	REGISTER,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER
 } from 'redux-persist'
 import { authSlice } from './slices/auth.slice'
 import { ErrorHandler } from '../middleware/error-handler.middleware'
 import {
-	mainMenuCategoriesReducer,
-	mainMenuCategoriesSlice,
+  mainMenuCategoriesReducer,
+  mainMenuCategoriesSlice
 } from './slices/mainMenuCategories.slice'
 import { userApi } from '../api/user.api'
-import { mediaApi } from '../api/media.api'
 import { modalWindowReducer } from './slices/modalWindow.slice'
 import { inputSlice } from './slices/input.slice'
+import { subscripReducer } from './slices/subscriptions.slice'
 
 const persistConfig = {
-	key: 'root',
-	version: 1,
-	storage,
-	whitelist: [authSlice.name, mainMenuCategoriesSlice.name],
+  key: 'root',
+  version: 1,
+  storage,
+  whitelist: [authSlice.name, mainMenuCategoriesSlice.name]
 }
 
 const rootReducer = combineReducers({
-	[authApi.reducerPath]: authApi.reducer,
-	[userApi.reducerPath]: userApi.reducer,
-	[mediaApi.reducerPath]: mediaApi.reducer,
-	input: inputSlice.reducer,
-	auth: authSlice.reducer,
-	mainMenuCategories: mainMenuCategoriesReducer,
-	modalWindow: modalWindowReducer,
+  [userApi.reducerPath]: userApi.reducer,
+  input: inputSlice.reducer,
+  auth: authSlice.reducer,
+  mainMenuCategories: mainMenuCategoriesReducer,
+  modalWindow: modalWindowReducer,
+  subscriptions: subscripReducer
 })
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
-	reducer: persistedReducer,
-	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware({
-			serializableCheck: {
-				ignoredActions: [
-					FLUSH,
-					REHYDRATE,
-					PAUSE,
-					PERSIST,
-					PURGE,
-					REGISTER,
-					authSlice.actions.removeUser.toString(),
-				],
-			},
-		}).concat([
-			authApi.middleware,
-			userApi.middleware,
-			mediaApi.middleware,
-			ErrorHandler,
-		]),
+  reducer: persistedReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          FLUSH,
+          REHYDRATE,
+          PAUSE,
+          PERSIST,
+          PURGE,
+          REGISTER,
+          authSlice.actions.removeUser.toString()
+        ]
+      }
+    }).concat([userApi.middleware, ErrorHandler])
 })
 
 export default store

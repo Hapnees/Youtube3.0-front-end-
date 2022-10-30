@@ -1,35 +1,108 @@
 .header {
-	@apply border border-transparent;
-	height: 300px;
+  @apply border border-transparent;
+  height: 300px;
 }
 
 .info {
-	@apply bg-[#151515];
-	height: 165px;
+  @apply bg-[#151515] flex w-full items-center;
+  height: 165px;
+}
+
+.info__box {
+  @apply flex flex-col mx-20 h-full w-full;
+
+  @media (max-width: 560px){
+    @apply mx-0;
+  }
+}
+
+.info__body {
+  @apply flex items-center justify-between h-full w-full;
+
+  @media (max-width: 560px){
+    @apply flex-col gap-1 h-fit;
+  }
+}
+
+.avatar {
+  @apply rounded-full;
+  width: 70px;
+  height: 70px;
+
+  @media (max-width: 560px){
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.subscribers_count {
+  @apply flex gap-1 text-zinc-400;
+
+  @media (max-width: 560px){
+    display: none;
+  }
 }
 
 .menu {
-	@apply flex gap-1;
+  @apply flex gap-1;
 
-	> input {
-		display: none;
+  @media (max-width: 560px){
+    @apply justify-center;
+  }
 
-		&:checked + label {
-			@apply text-zinc-300 bg-zinc-800;
-		}
-	}
+  @media (max-width: 390px){
+    @apply hidden;
+  }
 
-	> label {
-		@apply text-zinc-500 py-2 px-6 cursor-pointer uppercase rounded-md
+  > input {
+    display: none;
+
+    &:checked + label {
+      @apply text-zinc-300 bg-zinc-800;
+    }
+  }
+
+  > label {
+    @apply text-zinc-500 py-2 px-6 cursor-pointer uppercase rounded-md
 		hover:text-zinc-300 hover:bg-zinc-800 duration-300;
-	}
+  }
+}
+
+.description__container {
+  @apply border-red-600 w-full;
+
+  @media (max-width: 1280px){
+    display: none;
+  }
 }
 
 .description {
-	@apply text-zinc-400 tracking-wide;
-	width: 600px;
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
+  @apply text-zinc-400 tracking-wide w-full mx-auto text-center;
+  width: 600px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  @media (max-width: 1280px){
+    display: none;
+  }
+}
+
+.grid {
+  @apply inline-grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 12px;
+
+  @media (max-width: 1780px){
+    grid-template-columns: repeat(3, auto);
+  }
+
+  @media (max-width: 1410px){
+    grid-template-columns: repeat(2, auto);
+  }
+
+  @media (max-width: 1030px){
+    grid-template-columns: repeat(1, auto);
+  }
 }

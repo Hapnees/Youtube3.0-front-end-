@@ -3,6 +3,7 @@ $size: 250px;
 .title {
 	@apply tracking-wider text-[40px];
 	color: palevioletred;
+  font-weight: 400 !important;
 }
 
 .loader {

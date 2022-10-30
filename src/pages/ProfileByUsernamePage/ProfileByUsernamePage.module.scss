@@ -3,6 +3,10 @@
 	height: 300px;
 }
 
+.avatar {
+  @apply border-4 border-transparent rounded-full hover:border-dashed hover:border-blue-400 hover:scale-110 duration-300;
+}
+
 .info {
 	@apply bg-[#151515];
 	height: 165px;

@@ -1,140 +1,144 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import {
-	useLazyGetLikeVideosQuery,
-	useLazyGetVideosQuery,
-	useLazySearchUsersQuery,
-} from '../../api/user.api'
-import Loader from '../../components/ui/LoaderUI/Loader'
+import { useLazySearchUsersQuery } from '../../api/user.api'
+import { useLazyGetVideosQuery } from '../../api/video.api'
 import UserCard from '../../components/ui/UserCardUi/UserCard'
-import VideoGrid from '../../components/ui/VideoGridUI/VideoGrid/VideoGrid'
-import { toastConfig } from '../../config/toast.config'
+import VideoCard from '../../components/VideoCard/VideoCard'
 import { useActions } from '../../hooks/useActions'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
-import { IVideoGetVideoCard } from '../../models/video/video-get-VideoCardinterface'
+import { IUserGetSearch } from '../../models/user/user-get-search.interface'
+import { IVideoCard } from '../../models/video/video-get-VideoCard.interface'
 import cl from './HomePage.module.scss'
 
 const HomePage = () => {
-	const limit = 12
+  const [isFetching, setIsFetching] = useState(true)
 
-	const { user } = useTypedSelector(state => state.auth)
-	const [isFetching, setIsFetching] = useState(true)
-	const [videos, setVideos] = useState<IVideoGetVideoCard[]>([])
-	const [currentPage, setCurrentPage] = useState(1)
+  const isMounted = useRef(false)
 
-	const [totalPages, setTotalPages] = useState(0)
+  const [searchParams, setSearchParams] = useSearchParams()
 
-	const [
-		searchUsers,
-		{ data: searchedUsers, isLoading: isLoadingSearchedUsers },
-	] = useLazySearchUsersQuery()
+  const { category } = useTypedSelector(state => state.mainMenuCategories)
+  const { search } = useTypedSelector(state => state.input)
+  const { setSearch, setCategory } = useActions()
 
-	const { setCategory } = useActions()
-	const { category } = useTypedSelector(state => state.mainMenuCategories)
-	const { search } = useTypedSelector(state => state.input)
-	const [searchParams, setSearchParams] = useSearchParams()
-	const [getVideos, { isLoading: isLoadingVideos }] = useLazyGetVideosQuery()
-	const [getLikedVideos, { isLoading: isLoadingLikedVideos }] =
-		useLazyGetLikeVideosQuery()
+  const [compareCategory, setCompareCategory] = useState(category)
+  const [compareSearch, setCompareSearch] = useState(
+    searchParams.get('search') || ''
+  )
 
-	const [comapreCategory, setCompareCategory] = useState(category)
-	const [comapreSearch, setCompareSearch] = useState(searchParams.get('search'))
+  const [currentPageVideo, setCurrentPageVideo] = useState(1)
+  const [totalCountVideo, setTotalCountVideo] = useState(0)
 
-	useEffect(() => {
-		document.addEventListener('scroll', handleScroll)
+  const [currentPageUser, setCurrentPageUser] = useState(1)
+  const [totalCountUser, setTotalCountUser] = useState(0)
 
-		return () => document.removeEventListener('scroll', handleScroll)
-	}, [])
+  const [videos, setVideos] = useState<IVideoCard[]>([])
+  const [users, setUsers] = useState<IUserGetSearch[]>([])
 
-	// Поиск
-	useEffect(() => {
-		if (search) {
-			setSearchParams({ search })
-		} else {
-			setSearchParams()
-			setCategory('general')
-		}
-	}, [search])
+  const [getVideos] = useLazyGetVideosQuery()
+  const [getUsers] = useLazySearchUsersQuery()
 
-	// Фетч данных
-	useEffect(() => {
-		if (category !== comapreCategory) {
-			// console.log('isChangedCategory')
-			setIsFetching(true)
-			setVideos([])
-			setCurrentPage(1)
-		}
+  useEffect(() => {
+    setSearch(searchParams.get('search') || '')
+  }, [])
 
-		if (searchParams.get('search') !== comapreSearch) {
-			setIsFetching(true)
-			setVideos([])
-			setCurrentPage(1)
-		}
+  // Поиск
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true
+      return
+    }
 
-		// console.log(isFetching)
-		// console.log('currentPage -> ', currentPage)
-		// console.log('totalPages -> ', totalPages)
+    if (search) {
+      setSearchParams({ search })
+      setCategory('search')
+    } else {
+      setSearchParams()
+      setCategory('general')
+    }
+  }, [search])
 
-		if (isFetching && (currentPage <= totalPages || totalPages === 0)) {
-			if (category === 'liked') {
-				if (user.token) {
-					getLikedVideos({ limit, page: currentPage, token: user.token })
-						.unwrap()
-						.then(data => {
-							setVideos(prev => [...prev, ...data.videos])
-							setTotalPages(data.total_pages)
-							setIsFetching(false)
-						})
-						.finally(() => {
-							setCurrentPage(prev => prev + 1)
-							setCompareCategory(category)
-						})
-				} else {
-					toast.error('Сначала войдите в аккаунт', toastConfig)
-				}
-			} else {
-				getVideos({
-					limit,
-					page: currentPage,
-					category,
-					search: searchParams.get('search') || '',
-				})
-					.unwrap()
-					.then(data => {
-						setVideos(prev => [...prev, ...data.videos])
-						setTotalPages(data.total_pages)
-						setIsFetching(false)
-					})
-					.finally(() => {
-						setCurrentPage(prev => prev + 1)
-						setCompareCategory(category)
-					})
-			}
-		}
+  // Фетч
+  useEffect(() => {
+    const searchParamsValue = searchParams.get('search') || ''
+    if (compareCategory !== category || compareSearch !== searchParamsValue) {
+      setIsFetching(true)
+      setVideos([])
+      setUsers([])
+      setCurrentPageVideo(1)
+      setCurrentPageUser(1)
+      setTotalCountVideo(0)
+      setTotalCountUser(0)
+      if (category !== 'search') {
+        setSearch('')
+      }
+    }
 
-		setCompareSearch(searchParams.get('search'))
-	}, [isFetching, category, currentPage, searchParams.get('search')])
+    if (!isFetching) return
+    getVideos({
+      page: currentPageVideo,
+      category,
+      search: searchParamsValue
+    })
+      .unwrap()
+      .then(videoData => {
+        setVideos(prev => [...prev, ...videoData.videos])
+        setCurrentPageVideo(prev => prev + 1)
+        setTotalCountVideo(videoData.total_count)
+        if (category === 'search') {
+          getUsers({ username: searchParamsValue })
+            .unwrap()
+            .then(userData => {
+              setUsers(prev => [...prev, ...userData.users])
+              setCurrentPageUser(prev => prev + 1)
+              setTotalCountUser(userData.total_count)
+            })
+        }
+      })
+      .finally(() => {
+        setIsFetching(false)
+        setCompareCategory(category)
+        setCompareSearch(searchParamsValue)
+      })
+  }, [isFetching, category, currentPageVideo, searchParams, currentPageUser])
 
-	const handleScroll = (event: any) => {
-		const docElement = event.target.documentElement
-		if (
-			docElement.scrollHeight - (docElement.scrollTop + window.innerHeight) <
-			100
-		) {
-			setIsFetching(true)
-		}
-	}
+  // Скролл
+  useEffect(() => {
+    document.addEventListener('scroll', handleScroll)
 
-	return (
-		<div className='mt-4 w-full'>
-			{isLoadingVideos ? (
-				<Loader />
-			) : (
-				<>{videos && <VideoGrid videos={videos} />}</>
-			)}
-		</div>
-	)
+    return () => document.removeEventListener('scroll', handleScroll)
+  }, [videos, users])
+
+  const handleScroll = (event: any) => {
+    const docElement = event.target.documentElement
+    if (
+      docElement.scrollHeight - (docElement.scrollTop + window.innerHeight) <
+        100 &&
+      videos.length + users.length < totalCountVideo + totalCountUser
+    ) {
+      /* console.log('length -> ', videos.length) */
+      /* console.log('totalCount -> ', totalCount) */
+      /* console.log('currentPage -> ', currentPage) */
+      setIsFetching(true)
+    }
+  }
+
+  return (
+    <div>
+      <div className={cl.grid}>
+        <>
+          {videos.map(video => (
+            <VideoCard key={video.id} video={video} />
+          ))}
+        </>
+        <>
+          {users.map(user => (
+            <UserCard key={user.username} user={user} />
+          ))}
+        </>
+      </div>
+    </div>
+  )
 }
 
 export default HomePage

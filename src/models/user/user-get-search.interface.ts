@@ -1,9 +1,6 @@
-export interface IUserGet {
-  id: number
+export interface IUserGetSearch {
   username: string
-  email: string
   description: string
   avatar_path: string
-  header_path: string
   subscribers_count: number
 }

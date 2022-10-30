@@ -1,11 +1,15 @@
 @import '../../styles/variables.scss';
 
 .container {
-	@apply sticky top-[60px] py-6 font-semibold h-full;
-	margin-left: $main__spaceX;
+  @apply sticky top-[60px] py-6 font-semibold h-full;
+  margin-left: $main__spaceX;
+
+  @media (max-width: 830px) {
+    display: none;
+  }
 }
 
 .menu_subscribers {
-	@apply flex flex-col gap-3 my-6;
-	width: 200px;
+  @apply flex flex-col gap-3 my-6;
+  width: 200px;
 }

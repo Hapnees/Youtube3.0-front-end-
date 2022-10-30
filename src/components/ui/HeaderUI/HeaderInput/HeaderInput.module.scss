@@ -1,4 +1,17 @@
 .input {
-	@apply bg-[#161616] border border-[#333333] text-lg text-[#cfcfcf] pl-4 py-[6px] pr-[34px] rounded-xl;
-	width: 600px;
+  @apply bg-[#161616] border border-[#333333] text-lg text-[#cfcfcf] pl-4 py-[6px] pr-[34px] rounded-xl w-full;
+
+  @media (max-width: 760px){
+    @apply text-base;
+  }
+}
+
+.search {
+  @apply absolute cursor-pointer;
+  top: 10px;
+  right: 10px;
+
+  @media (max-width: 760px) {
+    top: 8px;
+  }
 }

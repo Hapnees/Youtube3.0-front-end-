@@ -8,54 +8,47 @@ import { CSSTransition } from 'react-transition-group'
 import { Link } from 'react-router-dom'
 
 const HeaderMenu = () => {
-	const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
-	const {
-		user: { username, avatarPath },
-	} = useTypedSelector(state => state.auth)
+  const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
+  const {
+    user: { username, avatarPath }
+  } = useTypedSelector(state => state.auth)
 
-	return (
-		<div className={cl.container}>
-			{avatarPath ? (
-				<Link to='/profile'>
-					<img
-						src={avatarPath}
-						alt=''
-						className='border-2 p-1 border-dashed border-transparent object-cover rounded-full hover:border-blue-400 hover:scale-110 duration-300 cursor-pointer w-[50px] h-[50px]'
-					/>
-				</Link>
-			) : (
-				<Link to='/profile'>
-					<FaUserAlt
-						className='border-2 border-white p-1 rounded-full cursor-pointer hover:border-blue-400 hover:border-dashed hover:scale-110 duration-300'
-						size={40}
-					/>
-				</Link>
-			)}
+  return (
+    <div className={cl.container}>
+      {avatarPath ? (
+        <Link to='/profile'>
+          <img src={avatarPath} alt='' className={cl.avatar} />
+        </Link>
+      ) : (
+        <Link to='/profile'>
+          <FaUserAlt className={cl.avatar__not_auth} />
+        </Link>
+      )}
 
-			<div className='relative'>
-				<div
-					className={cl.username__container}
-					onClick={() => setIsOpenPopup(!isOpenPopup)}
-				>
-					<p className='font-semibold tracking-wide'>{username}</p>
-					{isOpenPopup ? (
-						<MdKeyboardArrowDown size={18} className='rotate-180' />
-					) : (
-						<MdKeyboardArrowDown size={18} />
-					)}
-				</div>
+      <div className='relative'>
+        <div
+          className={cl.username__container}
+          onClick={() => setIsOpenPopup(!isOpenPopup)}
+        >
+          <p className='font-semibold tracking-wide'>{username}</p>
+          {isOpenPopup ? (
+            <MdKeyboardArrowDown size={18} className='rotate-180' />
+          ) : (
+            <MdKeyboardArrowDown size={18} />
+          )}
+        </div>
 
-				<CSSTransition
-					in={isOpenPopup}
-					timeout={300}
-					unmountOnExit
-					classNames='popup'
-				>
-					<PopupMenu setIsOpen={setIsOpenPopup} />
-				</CSSTransition>
-			</div>
-		</div>
-	)
+        <CSSTransition
+          in={isOpenPopup}
+          timeout={300}
+          unmountOnExit
+          classNames='popup'
+        >
+          <PopupMenu setIsOpen={setIsOpenPopup} />
+        </CSSTransition>
+      </div>
+    </div>
+  )
 }
 
 export default HeaderMenu

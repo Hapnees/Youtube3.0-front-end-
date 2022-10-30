@@ -1,119 +1,117 @@
 .video__info {
-	&:after {
-		@apply bg-zinc-800 my-2;
-		content: '';
-		display: block;
-		height: 2px;
-		width: 100%;
-	}
+  &:after {
+    @apply bg-zinc-800 my-2;
+    content: '';
+    display: block;
+    height: 2px;
+    width: 100%;
+  }
 }
 
 .top__info {
-	@apply flex flex-col;
+  @apply flex flex-col;
 
-	&:after {
-		@apply bg-zinc-800 my-4;
-		content: '';
-		display: block;
-		height: 2px;
-		width: 100%;
-	}
+  &:after {
+    @apply bg-zinc-800 my-4;
+    content: '';
+    display: block;
+    height: 2px;
+    width: 100%;
+  }
 }
 
 .video__title {
-	@apply text-[18px] whitespace-nowrap overflow-hidden text-ellipsis;
+  @apply text-[18px] whitespace-nowrap overflow-hidden text-ellipsis;
 }
 
 .button {
-	@apply flex items-center gap-2 px-4 border border-zinc-500 text-zinc-300 rounded-md cursor-pointer hover:text-white duration-300;
-	padding: 3px 0;
+  @apply flex items-center gap-2 border border-zinc-500 text-zinc-300 rounded-md cursor-pointer hover:text-white duration-300;
+  padding: 3px 16px;
 }
 
 .button__like {
-	&:hover {
-		background-color: #ac2d2d;
-		border-color: transparent;
-	}
+  &:hover {
+    background-color: #ac2d2d;
+    border-color: transparent;
+  }
 }
 
 .button__like__active {
-	border-color: transparent;
-	background-color: #ac2d2d;
+  border-color: transparent;
+  background-color: #ac2d2d;
 }
 
 .button__dislike {
-	&:hover {
-		background-color: #2d5cac;
-		border-color: transparent;
-	}
+  &:hover {
+    background-color: #2d5cac;
+    border-color: transparent;
+  }
 }
 
 .button__dislike__active {
-	&:hover {
-		background-color: #2d5cac;
-		border-color: transparent;
-	}
+  background-color: #2d5cac;
+  border-color: transparent;
 }
 
 .button__share {
-	@apply hover:bg-white hover:text-black;
+  @apply hover:bg-white hover:text-black;
 }
 
 .description {
-	width: 100%;
-	max-width: 900px;
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .description__full {
-	@apply w-[900px];
-	max-height: 100%;
+  @apply w-[900px];
+  max-height: 100%;
 }
 
 .input {
-	@apply bg-transparent text-white py-1 border-b border-zinc-600 w-full;
+  @apply bg-transparent text-white py-1 border-b border-zinc-600 w-full;
 }
 
 .textarea {
-	@apply bg-transparent text-white w-full resize-none;
+  @apply bg-transparent text-white w-full resize-none;
 }
 
 .button__send {
-	@apply px-4 py-2 text-white rounded-md uppercase;
+  @apply px-4 py-2 text-white rounded-md uppercase;
 }
 
 .button__send__active {
-	@apply bg-blue-500;
+  @apply bg-blue-500;
 }
 
 .button__send__nonactive {
-	@apply bg-zinc-600 opacity-50 cursor-default;
+  @apply bg-zinc-600 opacity-50 cursor-default;
 }
 
 .comments {
-	@apply flex flex-col gap-8;
-	> li {
-		@apply flex gap-3;
-	}
+  @apply flex flex-col gap-8;
+  > li {
+    @apply flex gap-3;
+  }
 }
 
 .like_dislike {
-	@apply flex gap-1 items-center border border-transparent rounded-md px-1 cursor-pointer hover:border-zinc-700 duration-300;
+  @apply flex gap-1 items-center border border-transparent rounded-md px-1 cursor-pointer hover:border-zinc-700 duration-300;
 }
 
 .like_dislike__count {
-	@apply text-zinc-400 text-sm;
-	height: 24px;
+  @apply text-zinc-400 text-sm;
+  height: 24px;
 }
 
 @keyframes volume {
-	from {
-		max-width: 30px;
-	}
-	to {
-		max-width: 100px;
-	}
+  from {
+    max-width: 30px;
+  }
+  to {
+    max-width: 100px;
+  }
 }

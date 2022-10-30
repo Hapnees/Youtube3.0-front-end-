@@ -1,7 +1,35 @@
 .container {
-	@apply flex items-center gap-3;
+  @apply flex items-center gap-3;
+
+  @media (max-width: 580px){
+    @apply px-4
+  }
+
+  @media (max-width: 560px){
+    @apply hidden;
+  }
 }
 
 .username__container {
-	@apply flex items-center gap-1 px-2 cursor-pointer hover:bg-white hover:text-black rounded-md duration-300;
+  @apply flex items-center gap-1 px-2 cursor-pointer hover:bg-white hover:text-black rounded-md duration-300;
+}
+
+.avatar {
+  @apply border-2 p-1 border-dashed border-transparent object-cover rounded-full hover:border-blue-400 hover:scale-110 duration-300 cursor-pointer;
+  width: 50px;
+  height: 50px;
+
+  @media (max-width: 760px) {
+  }
+}
+
+.avatar__not_auth {
+  @apply border-2 border-white p-1 rounded-full cursor-pointer hover:border-blue-400 hover:border-dashed hover:scale-110 duration-300;
+  width: 40px;
+  height: 40px;
+
+  @media (max-width: 760px) {
+    width: 35px;
+    height: 35px;
+  }
 }

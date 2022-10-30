@@ -19,6 +19,24 @@ body {
 	//Montserrat;
 }
 
+.grid {
+  display: inline-grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, auto);
+
+  @media (max-width: 1780px) {
+    grid-template-columns: repeat(3, auto);
+  }
+
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(2, auto);
+  }
+
+  @media (max-width: 1030px) {
+    grid-template-columns: repeat(1, auto);
+  }
+}
+
 // AUTHFORM ANIMATION
 
 .auth-enter {
