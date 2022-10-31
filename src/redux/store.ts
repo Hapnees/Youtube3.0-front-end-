@@ -15,7 +15,7 @@ import {
   mainMenuCategoriesReducer,
   mainMenuCategoriesSlice
 } from './slices/mainMenuCategories.slice'
-import { userApi } from '../api/user.api'
+import { api } from '../api/api.api'
 import { modalWindowReducer } from './slices/modalWindow.slice'
 import { inputSlice } from './slices/input.slice'
 import { subscripReducer } from './slices/subscriptions.slice'
@@ -28,7 +28,7 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  [userApi.reducerPath]: userApi.reducer,
+  [api.reducerPath]: api.reducer,
   input: inputSlice.reducer,
   auth: authSlice.reducer,
   mainMenuCategories: mainMenuCategoriesReducer,
@@ -53,7 +53,7 @@ const store = configureStore({
           authSlice.actions.removeUser.toString()
         ]
       }
-    }).concat([userApi.middleware, ErrorHandler])
+    }).concat([api.middleware, ErrorHandler])
 })
 
 export default store

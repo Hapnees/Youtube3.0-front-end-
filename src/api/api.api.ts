@@ -4,16 +4,16 @@ import { IUserGetSearch } from '../models/user/user-get-search.interface'
 import { IUserGet } from '../models/user/user-get.interface'
 import { IUserUpdate } from '../models/user/user-update.interface'
 
-export const userApi = createApi({
-  reducerPath: 'userApi',
-  tagTypes: ['User', 'VideoPage', 'Comment', 'Subscriptions'],
+export const api = createApi({
+  reducerPath: 'api',
+  tagTypes: ['User', 'VideoPage', 'Subscriptions'],
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:4000/api/'
   }),
   endpoints: build => ({
     searchUsers: build.query<
-      { users: IUserGetSearch[], total_count: number },
-      { username: string, limit?: number, page?: number }
+      { users: IUserGetSearch[]; total_count: number },
+      { username: string; limit?: number; page?: number }
     >({
       query: data => ({
         url: 'user/search',
@@ -110,4 +110,4 @@ export const {
   useLazyGetProfileByUsernameQuery,
   useLazyGetSubscriptionsQuery,
   useLazySearchUsersQuery
-} = userApi
+} = api

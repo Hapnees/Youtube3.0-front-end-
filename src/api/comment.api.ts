@@ -1,13 +1,18 @@
-import { ICommentGet } from "../models/comment/comment-get.interface";
-import { ICommentSend } from "../models/comment/comment-send.interface";
-import { userApi } from "./user.api";
+import { ICommentGet } from '../models/comment/comment-get.interface'
+import { ICommentSend } from '../models/comment/comment-send.interface'
+import { api } from './api.api'
 
-export const commentApi = userApi.injectEndpoints({
+const apiWithTags = api.enhanceEndpoints({ addTagTypes: ['Comment'] })
+
+export const commentApi = apiWithTags.injectEndpoints({
   endpoints: build => ({
-    getComments: build.query<ICommentGet[], number>({
-      query: videoId => ({
+    getComments: build.query<
+      { comments: ICommentGet[]; total_count: number },
+      { videoId: number; page?: number }
+    >({
+      query: data => ({
         url: 'comment/get',
-        params: { videoId }
+        params: data
       }),
       providesTags: ['Comment']
     }),
@@ -22,6 +27,9 @@ export const commentApi = userApi.injectEndpoints({
         headers: { Authorization: `Bearer ${token}` },
         body: comment
       }),
+      invalidatesTags: result => [
+        { type: 'Comment', commentId: result?.commentId }
+      ]
     }),
 
     addLikeComment: build.mutation<
@@ -34,6 +42,9 @@ export const commentApi = userApi.injectEndpoints({
         headers: { Authorization: `Bearer ${token}` },
         body
       }),
+      invalidatesTags: result => [
+        { type: 'Comment', commentId: result?.commentId }
+      ]
     }),
 
     addDislikeComment: build.mutation<
@@ -46,13 +57,15 @@ export const commentApi = userApi.injectEndpoints({
         headers: { Authorization: `Bearer ${token}` },
         body
       }),
-    }),
-
-
+      invalidatesTags: result => [
+        { type: 'Comment', commentId: result?.commentId }
+      ]
+    })
   })
 })
 
 export const {
+  useLazyGetCommentsQuery,
   useGetCommentsQuery,
   useAddCommentMutation,
   useAddLikeCommentMutation,

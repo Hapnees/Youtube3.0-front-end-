@@ -4,7 +4,7 @@ import {
   useLazyGetProfileByUsernameAuthQuery,
   useLazyGetProfileByUsernameQuery,
   useSubscribeMutation
-} from '../../api/user.api'
+} from '../../api/api.api'
 import profileIcon from '../../assets/img/profile.png'
 import Loader from '../../components/ui/LoaderUI/Loader'
 /* import SubscribeButton from '../../components/ui/ProfileUI/SubscribeButton/SubscribeButton' */
@@ -189,7 +189,10 @@ const ProfileByUsernamePage = () => {
           ) : (
             <div className='w-full'>
               <div className='grid'>
-                {videos && videos.map(video => <VideoCard key={video.id} video={video} />)}
+                {videos &&
+                  videos.map(video => (
+                    <VideoCard key={video.id} video={video} />
+                  ))}
               </div>
             </div>
           )}

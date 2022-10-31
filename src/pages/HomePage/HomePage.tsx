@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useLazySearchUsersQuery } from '../../api/user.api'
+import { useLazySearchUsersQuery } from '../../api/api.api'
 import { useLazyGetVideosQuery } from '../../api/video.api'
+import Loader from '../../components/ui/LoaderUI/Loader'
 import UserCard from '../../components/ui/UserCardUi/UserCard'
 import VideoCard from '../../components/VideoCard/VideoCard'
 import { useActions } from '../../hooks/useActions'
@@ -16,7 +17,6 @@ const HomePage = () => {
   const isMounted = useRef(false)
 
   const [searchParams, setSearchParams] = useSearchParams()
-
   const { category } = useTypedSelector(state => state.mainMenuCategories)
   const { search } = useTypedSelector(state => state.input)
   const { setSearch, setCategory } = useActions()
@@ -113,30 +113,46 @@ const HomePage = () => {
     const docElement = event.target.documentElement
     if (
       docElement.scrollHeight - (docElement.scrollTop + window.innerHeight) <
-        100 &&
+      100 &&
       videos.length + users.length < totalCountVideo + totalCountUser
     ) {
-      /* console.log('length -> ', videos.length) */
-      /* console.log('totalCount -> ', totalCount) */
-      /* console.log('currentPage -> ', currentPage) */
       setIsFetching(true)
     }
   }
 
   return (
-    <div>
-      <div className={cl.grid}>
+    <div className='w-full'>
+      {isFetching ? (
+        <Loader />
+      ) : (
         <>
-          {videos.map(video => (
-            <VideoCard key={video.id} video={video} />
-          ))}
+          {!videos.length && !users.length ? (
+            <div className='mt-12 ml-12 text-[40px]'>
+              {category === 'search' ? (
+                <p>
+                  Материалы по запросу <span>{searchParams.get('search')}</span>{' '}
+                  не найдены
+                </p>
+              ) : (
+                <p>Материалы отсутствуют</p>
+              )}
+            </div>
+          ) : (
+            <div className={cl.grid}>
+              <>
+                {videos.map(video => (
+                  <VideoCard key={video.id} video={video} />
+                ))}
+              </>
+              <>
+                {users.map(user => (
+                  <UserCard key={user.username} user={user} />
+                ))}
+              </>
+            </div>
+          )}
         </>
-        <>
-          {users.map(user => (
-            <UserCard key={user.username} user={user} />
-          ))}
-        </>
-      </div>
+      )}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import cl from './MainMenu.module.scss'
 import SubscriberCard from '../ui/MainMenuUI/SubscriberCard/SubscriberCard'
 import MainMenuCategories from './MainMenuCategories/MainMenuCategories'
-import { useLazyGetSubscriptionsQuery } from '../../api/user.api'
+import { useLazyGetSubscriptionsQuery } from '../../api/api.api'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
 import { useActions } from '../../hooks/useActions'
 import Loader from '../ui/LoaderUI/Loader'
@@ -32,9 +32,9 @@ const MainMenu = () => {
         {!!user.token?.length && (
           <div className='pl-2'>
             <p className='uppercase text-[#3c3c3c] tracking-wider'>Подписки</p>
-            {isLoadingSub ?
+            {isLoadingSub ? (
               <Loader />
-              :
+            ) : (
               <ul className={cl.menu_subscribers}>
                 {subscriptions &&
                   user.token &&
@@ -42,7 +42,7 @@ const MainMenu = () => {
                     <SubscriberCard key={sub.username} sub={sub} />
                   ))}
               </ul>
-            }
+            )}
           </div>
         )}
       </div>

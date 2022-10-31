@@ -1,6 +1,6 @@
-import { userApi } from './user.api';
+import { api } from './api.api'
 
-export const mediaApi = userApi.injectEndpoints({
+export const mediaApi = api.injectEndpoints({
   endpoints: build => ({
     uploadImage: build.mutation<
       { url: string },
@@ -11,15 +11,15 @@ export const mediaApi = userApi.injectEndpoints({
         method: 'POST',
         params: {
           userId,
-          folder,
+          folder
         },
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
-        body: file,
-      }),
-    }),
-  }),
+        body: file
+      })
+    })
+  })
 })
 
 export const { useUploadImageMutation } = mediaApi

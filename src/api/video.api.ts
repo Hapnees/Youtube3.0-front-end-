@@ -3,9 +3,9 @@ import { IVideoAdd } from '../models/video/video-add.interface'
 import { IVideoGetVideoPage } from '../models/video/video-get-page.interface'
 import { IVideoCard } from '../models/video/video-get-VideoCard.interface'
 import { IVideoUpdate } from '../models/video/video-uptadte.interface'
-import { userApi } from './user.api'
+import { api } from './api.api'
 
-const apiWithTags = userApi.enhanceEndpoints({ addTagTypes: ['ProfileVideos'] })
+const apiWithTags = api.enhanceEndpoints({ addTagTypes: ['ProfileVideos'] })
 
 export const videoApi = apiWithTags.injectEndpoints({
   endpoints: build => ({
@@ -49,12 +49,12 @@ export const videoApi = apiWithTags.injectEndpoints({
       providesTags: result =>
         result
           ? [
-            ...result.map(({ id }) => ({
-              type: 'ProfileVideos' as const,
-              id
-            })),
-            'ProfileVideos'
-          ]
+              ...result.map(({ id }) => ({
+                type: 'ProfileVideos' as const,
+                id
+              })),
+              'ProfileVideos'
+            ]
           : ['ProfileVideos']
     }),
 

@@ -14,7 +14,7 @@ import { useUploadImageMutation } from '../../api/media.api'
 import { BsCheckLg } from 'react-icons/bs'
 import { IVideoAdd } from '../../models/video/video-add.interface'
 import { useActions } from '../../hooks/useActions'
-import { useGetProfileQuery } from '../../api/user.api'
+import { useGetProfileQuery } from '../../api/api.api'
 import { useAddVideoMutation } from '../../api/video.api'
 
 interface IAddVideoDetailsProps {
@@ -27,10 +27,10 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
   const [progress, setProgress] = useState<number>(0)
 
   const {
-    user: { id: userId, token },
+    user: { id: userId, token }
   } = useTypedSelector(state => state.auth)
   const { register, setValue, handleSubmit } = useForm<IVideoAdd>({
-    mode: 'onChange',
+    mode: 'onChange'
   })
 
   const { data: getProfileUser } = useGetProfileQuery(token || '')
@@ -119,7 +119,7 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
           onUploadProgress: event => {
             if (event.total)
               setProgress(Math.round((event.loaded * 100) / event.total))
-          },
+          }
         }
       )
 
@@ -132,14 +132,14 @@ const AddVideoDetails: FC<IAddVideoDetailsProps> = ({ videoFile }) => {
         file: imgData,
         userId: userId || 0,
         token: token || '',
-        folder: `videos/vid_${videoUploadData.data.vid}/thumbnail`,
+        folder: `videos/vid_${videoUploadData.data.vid}/thumbnail`
       })
 
       dataSubmit.thumbnailPath = imgUploadData.data.url
 
       const addVideoData: any = await addVideo({
         file: dataSubmit,
-        token: token || '',
+        token: token || ''
       })
       setIsComplete(true)
       toast.success(addVideoData.data.message, toastConfig)

@@ -3,7 +3,7 @@ import cl from './ProfilePage.module.scss'
 import profileIcon from '../../assets/img/profile.png'
 import SubscribeButton from '../../components/ui/ProfileUI/SubscribeButton/SubscribeButton'
 import { useNavigate } from 'react-router-dom'
-import { useGetProfileQuery } from '../../api/user.api'
+import { useGetProfileQuery } from '../../api/api.api'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
 import Loader from '../../components/ui/LoaderUI/Loader'
 import { numberFormat } from '../../utils/number.format'
@@ -66,9 +66,7 @@ const ProfilePage = () => {
                           />
                           <div>
                             <div className='flex flex-col'>
-                              <p className='text-2xl'>
-                                {profileData.username}
-                              </p>
+                              <p className='text-2xl'>{profileData.username}</p>
                               <div className={cl.subscribers_count}>
                                 <p>
                                   {numberFormat(
@@ -96,7 +94,6 @@ const ProfilePage = () => {
                         </SubscribeButton>
                       </div>
                     </div>
-
 
                     <div className={cl.menu}>
                       <input
@@ -136,7 +133,10 @@ const ProfilePage = () => {
               ) : (
                 <div className='w-full'>
                   <div className={cl.grid}>
-                    {resultVideos && resultVideos.map(video => <VideoCard key={video.id} video={video} />)}
+                    {resultVideos &&
+                      resultVideos.map(video => (
+                        <VideoCard key={video.id} video={video} />
+                      ))}
                   </div>
                 </div>
               )}
